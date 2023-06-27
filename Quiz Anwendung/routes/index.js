@@ -9,13 +9,21 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  
+  const { username, password, password2 } = req.body;
   try {
+    // Überprüfen, ob Passwörter übereinstimmen
+    var pass1 = password.value;
+    var pass2 = password2.value;
+    if (pass1 != pass2) {
+    //PW stimmen nicht überein
+      console.error('Passwörter stimmen nicht überein', error)
+      return res.redirect('/register');
+    }
     // Überprüfen, ob der Benutzer bereits existiert
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       //User existiert, Register Formular wird neugeladen
+      console.error('Nutzer existiert bereits', error)
       return res.redirect('/register');
     }
     
