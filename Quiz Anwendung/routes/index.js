@@ -9,25 +9,41 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password, confPassword } = req.body;
   
   try {
+    //Validierung, ob eine E-Mail-Adresse im korrekten Format eingegeben wurde
+    const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(!email.match(mailFormat)) {
+      //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
+      return res.redirect('/register');
+    }
+
+    //Passwort-Felder auf Gleichheit überprüfen
+    if(password != confPassword) {
+      //Passworte stimmen nicht überein, Register Formular wird neugeladen
+      return res.redirect('/register');
+    }
+
     // Überprüfen, ob der Benutzer bereits existiert
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       //User existiert, Register Formular wird neugeladen
       return res.redirect('/register');
     }
     
+    //Username definieren
+    const username = email.split('@')[0];
+
     // Neuen Benutzer erstellen
-    const user = new User({ username, password });
+    const user = new User({ email, username, password });
     await user.save();
     
     // Sitzungsdaten festlegen
     req.session.user = user;
     
     //Weiterleiten zum Dashboard
-    res.redirect('/dashboard');
+    res.redirect('/login');
 
   } catch (error) {
     console.error('Registration error:', error);
