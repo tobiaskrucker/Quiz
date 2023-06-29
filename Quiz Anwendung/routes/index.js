@@ -57,14 +57,15 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   
   try {
     // Informationen aus dem Formular in DB überprüfen
-    const user = await User.findOne({ username, password });
+    const user = await User.findOne({ email, password });
     if (!user) {
-      //Kein übereinstimmender User gefunden, Login Formular wird neugeladen
-      return res.redirect('/login');
+      //Kein übereinstimmender User gefunden, Login Formular wird neugeladen und Login Error an Infobox mit Fehler weitergegeben
+      const loginError = true;
+      return res.render('/login', loginError);
     }
     
     // Sitzungsdaten festlegen
