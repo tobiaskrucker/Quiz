@@ -1,8 +1,43 @@
-<h1>Registrierung</h1>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <%- include('./partials/head'); %>
+</head>
+<body class="container">
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+      <div class="col-md-8 col-lg-7 col-xl-6">
+        <img src="../images/iu_logo_schwarz.png" class="img-fluid" alt="IU Logo">
+      </div>
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <form action="/register" method="POST">
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="email" name="email" class="form-control form-control-lg" />
+            <label class="form-label" for="form1Example13">Email-Adresse</label>
+          </div>
 
-<form action="/register" method="POST">
-  <input type="email" name="email" placeholder="E-Mail-Adresse" required>
-  <input type="password" name="password" placeholder="Passwort" required>
-  <input type="password" name="confPassword" placeholder="Passwort wiederholen" required>
-  <button type="submit">Jetzt registrieren</button>
-</form>
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+            <input type="password" name="password" class="form-control form-control-lg" />
+            <label class="form-label" for="form1Example23">Passwort</label>
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+            <input type="password" name="confPassword" class="form-control form-control-lg" />
+            <label class="form-label" for="form1Example23">Passwort wiederholen</label>
+          </div>
+
+          <!-- Submit button -->
+          <div class="d-flex align-items-center justify-content-center pb-4">
+            <button type="submit" class="btn btn-dark btn-lg btn-block">Registrieren</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
