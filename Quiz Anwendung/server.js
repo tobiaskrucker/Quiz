@@ -27,6 +27,9 @@ app.set('view engine', 'ejs');
 // Body-Parser verwenden
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// lokales Verzeichnis verwenden
+app.use(express.static(__dirname + '/assets'));
+
 // Routers registrieren
 const mainRouter = require('./routes/index');
 app.use('/', mainRouter);
