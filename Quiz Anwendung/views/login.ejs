@@ -44,5 +44,13 @@
     </div>
   </div>
 </section>
+<% if (loginError) { %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var myModal = new bootstrap.Modal(document.getElementById('modalUnknownUser'));
+      myModal.show();
+    });
+  </script>
+<% } %>
 </body>
 </html>

@@ -53,7 +53,8 @@ router.post('/register', async (req, res) => {
 
 // Login-Route
 router.get('/login', (req, res) => {
-  res.render('login.ejs');
+  let loginError = false;
+  res.render('login.ejs', { loginError: false });
 });
 
 router.post('/login', async (req, res) => {
@@ -61,12 +62,19 @@ router.post('/login', async (req, res) => {
   
   try {
     // Informationen aus dem Formular in DB überprüfen
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({ email });
     if (!user) {
-      //Kein übereinstimmender User gefunden, Login Formular wird neugeladen und Login Error an Infobox mit Fehler weitergegeben
-      const loginError = true;
-      return res.render('/login', loginError);
+      //Kein übereinstimmender User gefunden, Login Formular wird neugeladen und LoginError an ModalUnknownUser weitergegeben
+      let loginError = true;
+      return res.render('login', { loginError: true });
     }
+    const userPassword = await User.findOne({ email, password });
+    if (!userPassword) {
+      //Richtige E-Mail aber falsches Passwort, Login Formular wird neugeladen und LoginError an ModalUnknownUser weitergegeben
+      let loginError = true;
+      return res.render('login', { loginError: true });
+    }
+
     
     // Sitzungsdaten festlegen
     req.session.user = user;
@@ -75,7 +83,7 @@ router.post('/login', async (req, res) => {
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Login error:', error);
-    res.redirect('/login');
+    res.render('login' , {loginError: true});
   }
 });
 
