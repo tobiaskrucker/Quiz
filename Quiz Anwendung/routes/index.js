@@ -64,28 +64,25 @@ router.post('/login', async (req, res) => {
     // Informationen aus dem Formular in DB überprüfen
     const user = await User.findOne({ email });
     if (!user) {
-      //Kein übereinstimmender User gefunden, Login Formular wird neugeladen und LoginError an ModalUnknownUser weitergegeben
-      let loginError = true;
-      return res.render('login', { loginError: true });
+      throw new Error('Benutzername existiert nicht.');
     }
-    const userPassword = await User.findOne({ email, password });
-    if (!userPassword) {
-      //Richtige E-Mail aber falsches Passwort, Login Formular wird neugeladen und LoginError an ModalUnknownUser weitergegeben
-      let loginError = true;
-      return res.render('login', { loginError: true });
+    
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      throw new Error('Falsches Passwort.');
     }
 
-    
     // Sitzungsdaten festlegen
     req.session.user = user;
     
-    //Weiterleiten zum Dashboard
+    // Weiterleiten zum Dashboard
     res.redirect('/dashboard');
   } catch (error) {
-    console.error('Login error:', error);
-    res.render('login' , {loginError: true});
+    console.error('Login-Fehler:', error);
+    res.render('login', { loginError: true, errorMessage: error.message });
   }
 });
+
 
 // Dashboard-Route
 router.get('/dashboard', (req, res) => {
