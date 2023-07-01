@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 // Registrierungsroute
 router.get('/register', (req, res) => {
-  res.render('register.ejs');
+  res.render('register.ejs', { registerError: '' });
 });
 
 router.post('/register', async (req, res) => {
@@ -16,20 +16,22 @@ router.post('/register', async (req, res) => {
     const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(!email.match(mailFormat)) {
       //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
-      return res.redirect('/register');
+      throw new Error('E-Mail-Adresse stimmt nicht mit dem notwendigen Format überein.');
     }
 
     //Passwort-Felder auf Gleichheit überprüfen
     if(password != confPassword) {
       //Passworte stimmen nicht überein, Register Formular wird neugeladen
-      return res.redirect('/register');
+      res.render('register', { registerError: 'modalPwNotSame'});
+      throw new Error('Die Passworte stimmen nicht überein.');
     }
 
     // Überprüfen, ob der Benutzer bereits existiert
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       //User existiert, Register Formular wird neugeladen
-      return res.redirect('/register');
+      res.render('register', { registerError: 'modalUserExists'});
+      throw new Error('Der Account existiert bereits.');
     }
     
     //Username definieren
@@ -46,8 +48,7 @@ router.post('/register', async (req, res) => {
     res.redirect('/login');
 
   } catch (error) {
-    console.error('Registration error:', error);
-    res.redirect('/register');
+    console.error('Registration-Fehler:', error);
   }
 });
 

@@ -43,5 +43,13 @@
     </div>
   </div>
 </section>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if(<%= registerError %> != '') {
+      var myModal = new bootstrap.Modal(document.getElementById('<%= registerError %>'));
+      myModal.show();
+    }
+  });
+</script>
 </body>
 </html>
