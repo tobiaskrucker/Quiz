@@ -62,14 +62,9 @@ router.post('/login', async (req, res) => {
   
   try {
     // Informationen aus dem Formular in DB überprüfen
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, password });
     if (!user) {
-      throw new Error('Benutzername existiert nicht.');
-    }
-    
-    const isPasswordValid = await user.comparePassword(password);
-    if (!isPasswordValid) {
-      throw new Error('Falsches Passwort.');
+      throw new Error('Benutzername oder Passwort falsch.');
     }
 
     // Sitzungsdaten festlegen
