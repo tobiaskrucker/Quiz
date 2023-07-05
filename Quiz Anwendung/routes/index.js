@@ -38,7 +38,12 @@ router.post('/register', async (req, res) => {
     const username = email.split('@')[0];
 
     // Neuen Benutzer erstellen
-    const user = new User({ email, username, password });
+    const user = new User({ 
+      email: email,
+      username: username,
+      password: password,
+      role: "user"
+    });
     await user.save();
     
     // Sitzungsdaten festlegen
