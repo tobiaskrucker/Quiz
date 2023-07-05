@@ -5,51 +5,8 @@
 
 </head>
 <body>
-  <header>
-    <!-- Navigationsheader -->
-    <nav class="navbar navbar-expand-sm navbar-light bg-white">
-        <div class="container-fluid">
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-mdb-toggle="collapse"
-            data-mdb-target="#navbarExample01"
-            aria-controls="navbarExample01"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <i class="fas fa-bars"></i>
-          </button>
-          <div class="collapse navbar-collapse shadow-sm p-3 mb-3 bg-white rounded" id="navbarExample01">
-            <img src="../images/iu_logo_schwarz.png" class="img-fluid" alt="IU Logo" width="150" height="auto" >
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <!-- Fragenverwaltung wird nur angezeigt, wenn User Admin-Rechte besitzt -->
-                <% if(user.role === 'admin'){ %>
-                  <li class="nav-item">
-                    <a class="nav-link fs-5" href="#">Fragenverwaltung</a>
-                <% } %>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link fs-5" aria-current="page" href="#">Spielsitzungen</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link fs-5" href="#">Ranking</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link fs-5" href="#">Profil</a>
-              </li>
-              <!-- Button zum Ausloggen -->
-              <li class="nav-item">
-                <a class="nav-link" href="/logout" data-toggle="tooltip" title="Ausloggen"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg></a>
-              </li> 
-          </div>
-        </div>
-      </nav>
+  <%- include('./partials/header'); %>
 
-
-
-
-    
 <p>Willkommen, <%= user.username %>!</p>
 <p>Spielsitzungen</p>
 
