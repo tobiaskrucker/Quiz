@@ -16,6 +16,7 @@ router.post('/register', async (req, res) => {
     const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(!email.match(mailFormat)) {
       //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
+      res.render('register', { registerError: 'modalEmailIncorrect'});
       throw new Error('E-Mail-Adresse stimmt nicht mit dem notwendigen Format überein.');
     }
 
