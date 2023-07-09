@@ -85,7 +85,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 // Dashboard-Route
 router.get('/dashboard', (req, res) => {
   // Überprüfen, ob der Benutzer angemeldet ist
@@ -93,6 +92,11 @@ router.get('/dashboard', (req, res) => {
     return res.redirect('/login');
   }
   res.render('dashboard.ejs', { user: req.session.user });
+});
+
+// Fragenverwaltung-Route
+router.get('/qmanagement', (req, res) => {
+  res.render('qmanagement.ejs', { user: req.session.user });
 });
 
 // Logout-Route
