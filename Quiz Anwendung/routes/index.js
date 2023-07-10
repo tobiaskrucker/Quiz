@@ -25,12 +25,10 @@ router.post('/register', async (req, res) => {
     "iubh.de"
   ];
 
-
   try {
     //Validierung, ob eine E-Mail-Adresse im korrekten Format eingegeben wurde
     if(!email.match(mailFormat)) {
       //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
-      res.render('register', { registerError: 'modalEmailFormatFalse'});
       res.render('register', { registerError: 'modalEmailIncorrect'});
       throw new Error('E-Mail-Adresse stimmt nicht mit dem notwendigen Format überein.');
     }
