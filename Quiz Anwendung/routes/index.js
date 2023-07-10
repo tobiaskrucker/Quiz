@@ -11,12 +11,34 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
   const { email, password, confPassword } = req.body;
   
+  const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+  const allowedMailDomains = [
+    "iubh-fernstudium.de",
+    "iu-fernstudium.de",
+    "iubh-dualesstudium.de",
+    "iu-dualesstudium.de",
+    "iu.org",
+    "iubh.org",
+    "iu.de",
+    "iubh.de"
+  ];
+
+
   try {
     //Validierung, ob eine E-Mail-Adresse im korrekten Format eingegeben wurde
-    const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if(!email.match(mailFormat)) {
       //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
+      res.render('register', { registerError: 'modalEmailFormatFalse'});
       throw new Error('E-Mail-Adresse stimmt nicht mit dem notwendigen Format überein.');
+    }
+
+    //Validierung, ob eine E-Mail-Adresse der IU zugeordnet ist
+    const emailDomain = email.split('@')[1];
+    if(!allowedMailDomains.includes(emailDomain)) {
+      //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
+      res.render('register', { registerError: 'modalNoIUMail'});
+      throw new Error('E-Mail-Adresse ist nicht der IU zuzuordnen.');
     }
 
     //Passwort-Felder auf Gleichheit überprüfen
