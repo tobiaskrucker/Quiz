@@ -19,7 +19,8 @@
               <!-- Fragenverwaltung wird nur angezeigt, wenn User Admin-Rechte besitzt -->
               <% if(user.role === 'admin'){ %>
                 <li class="nav-item">
-                  <a class="nav-link fs-5" href="#">Fragenverwaltung</a>
+                  <!-- href mit "#"" durch "addQuestion" zum Testen ersetzt -->
+                  <a class="nav-link fs-5" href="/addQuestion">Fragenverwaltung</a>
               <% } %>
             </li>
             <li class="nav-item">
