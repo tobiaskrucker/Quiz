@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/user');
+const Question = require('../models/question');
 
 // Registrierungsroute
 router.get('/register', (req, res) => {
@@ -30,6 +31,7 @@ router.post('/register', async (req, res) => {
     if(!email.match(mailFormat)) {
       //Eingabe ist keine korrekte E-Mail-Adresse, Register Formular wird neugeladen
       res.render('register', { registerError: 'modalEmailFormatFalse'});
+      res.render('register', { registerError: 'modalEmailIncorrect'});
       throw new Error('E-Mail-Adresse stimmt nicht mit dem notwendigen Format überein.');
     }
 
@@ -106,7 +108,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 // Dashboard-Route
 router.get('/dashboard', (req, res) => {
   // Überprüfen, ob der Benutzer angemeldet ist
@@ -116,10 +117,52 @@ router.get('/dashboard', (req, res) => {
   res.render('dashboard.ejs', { user: req.session.user });
 });
 
+// Fragenverwaltung-Route
+router.get('/qmanagement', (req, res) => {
+  res.render('qmanagement.ejs', { user: req.session.user });
+});
+
 // Logout-Route
 router.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/login');
 });
+
+
+//AddQuestion-Route
+router.get('/addQuestion', (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  res.render('addQuestion.ejs',  { user: req.session.user });
+});
+
+
+router.post('/addQuestion', async (req, res) => {
+  const formData = req.body;
+  
+  try {
+    // Informationen aus dem Formular in DB speichern
+    const newQuestion = new Question({
+        question: formData.question,
+        rightAnswer: formData.rightAnswer,
+        answer2: formData.answer2,
+        answer3: formData.answer3,
+        answer4: formData.answer4, 
+        explanation: formData.explanation       
+ })
+
+    await newQuestion.save();
+   
+    
+    // Weiterleiten zum Dashboard
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Frage kann nicht angelegt werden: ', error);
+    res.render('addQuestion', { errorMessage: error.message });
+  }
+});
+
 
 module.exports = router;
