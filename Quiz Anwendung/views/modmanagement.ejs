@@ -13,22 +13,21 @@
       </h6>
       <div class="media text-muted pt-3">
       </div>
-      <p>Hier können Sie die Fragen der einzelnen Module verwalten.</p>
-      <p>Bitte wählen Sie die entsprechende Frage aus oder erstellen Sie eine Neue.</p>
+        <p>Hier können Sie die einzelnen Module verwalten.</p>
+        <p>Bitte wählen Sie das entsprechende Modul aus oder erstellen Sie ein neues.</p>
       <div class="media text-muted pt-3">
       </div>
-        <a href="/addQuestion" class="btn btn-secondary" role="button">Frage hinzufügen</a>
+        <a href="/addModule" class="btn btn-secondary" role="button">Modul hinzufügen</a>
       <div class="media text-muted pt-3">
       </div>
-        <!-- Tabelle aller vorhandenen Fragen -->
         <table id="ModulesTable" class="table table-hover">
           <thead class="thead-dark">
           <tr>
-            <th>Fragentitel</th>
+            <th>Modulname</th>
+            <th>Anzahl der Fragen</th>
           </tr>
           </thead>
           <tbody>
-            <%= question.question %>
           </tbody>
           </table>
     </main>

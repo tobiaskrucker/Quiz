@@ -115,6 +115,11 @@ router.get('/dashboard', (req, res) => {
   res.render('dashboard.ejs', { user: req.session.user });
 });
 
+// Modulverwaltung-Route
+router.get('/modmanagement', (req, res) => {
+  res.render('modmanagement.ejs', { user: req.session.user });
+});
+
 // Fragenverwaltung-Route
 router.get('/qmanagement', (req, res) => {
   res.render('qmanagement.ejs', { user: req.session.user });
@@ -126,6 +131,16 @@ router.get('/logout', (req, res) => {
   res.redirect('/login');
 });
 
+//AddModule-Route
+router.get('/addModule', (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  res.render('addModule.ejs',  { user: req.session.user });
+});
+
+//Hier muss noch der POST-Command analog des Hinzufügens einer Frage rein
 
 //AddQuestion-Route
 router.get('/addQuestion', (req, res) => {
