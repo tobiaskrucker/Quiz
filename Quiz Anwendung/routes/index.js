@@ -3,6 +3,7 @@ const router = express.Router();
 
 const User = require('../models/user');
 const Question = require('../models/question');
+const { model } = require('mongoose');
 
 // Registrierungsroute
 router.get('/register', (req, res) => {
@@ -122,6 +123,13 @@ router.get('/modmanagement', async (req, res) => {
 });
 
 // Fragenverwaltung-Route
+router.post('/moduleselect', async (req, res) => {
+  const { moduleselect } = req.body;
+  const module = await User.find({});
+  const question = await Question.find({});
+  res.render('qmanagement.ejs', { user: req.session.user, module: module, moduleselect: moduleselect, question: question });
+});
+
 router.get('/qmanagement', async (req, res) => {
   const question = await Question.find({});
   res.render('qmanagement.ejs', { user: req.session.user, question: question });
