@@ -116,13 +116,15 @@ router.get('/dashboard', (req, res) => {
 });
 
 // Modulverwaltung-Route
-router.get('/modmanagement', (req, res) => {
-  res.render('modmanagement.ejs', { user: req.session.user });
+router.get('/modmanagement', async (req, res) => {
+  const module = await User.find({});
+  res.render('modmanagement.ejs', { user: req.session.user, module: module });
 });
 
 // Fragenverwaltung-Route
-router.get('/qmanagement', (req, res) => {
-  res.render('qmanagement.ejs', { user: req.session.user });
+router.get('/qmanagement', async (req, res) => {
+  const question = await Question.find({});
+  res.render('qmanagement.ejs', { user: req.session.user, question: question });
 });
 
 // Logout-Route

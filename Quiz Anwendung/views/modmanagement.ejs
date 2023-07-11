@@ -2,24 +2,24 @@
 <html lang="de">
 <head>
   <%- include('./partials/head'); %>
-
 </head>
 <body class="bg-light">
   <%- include('./partials/header'); %>
  
     <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
-      <h6 class="border-bottom border-gray pb-2 mb-0">
-        <p>Fragenverwaltung</p>
-      </h6>
+      <h5 class="border-bottom border-gray pb-2 mb-0">
+        <p>Modulverwaltung</p>
+      </h5>
       <div class="media text-muted pt-3">
       </div>
         <p>Hier können Sie die einzelnen Module verwalten.</p>
-        <p>Bitte wählen Sie das entsprechende Modul aus oder erstellen Sie ein neues.</p>
+        <p>Bitte wählen Sie das entsprechende Modul aus, um die zugeordneten Fragen zu editieren oder erstellen Sie ein neues.</p>
       <div class="media text-muted pt-3">
       </div>
         <a href="/addModule" class="btn btn-secondary" role="button">Modul hinzufügen</a>
       <div class="media text-muted pt-3">
       </div>
+      <!-- Tabelle aller vorhandenen Module -->
         <table id="ModulesTable" class="table table-hover">
           <thead class="thead-dark">
           <tr>
@@ -28,6 +28,11 @@
           </tr>
           </thead>
           <tbody>
+            <% module.forEach( module => { %>
+              <tr>
+                <th scope="row"><%= module.email %></th>
+              </tr>
+              <% }); %> 
           </tbody>
           </table>
     </main>

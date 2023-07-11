@@ -8,9 +8,9 @@
   <%- include('./partials/header'); %>
  
     <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
-      <h6 class="border-bottom border-gray pb-2 mb-0">
+      <h5 class="border-bottom border-gray pb-2 mb-0">
         <p>Fragenverwaltung</p>
-      </h6>
+      </h5>
       <div class="media text-muted pt-3">
       </div>
       <p>Hier können Sie die Fragen der einzelnen Module verwalten.</p>
@@ -28,7 +28,11 @@
           </tr>
           </thead>
           <tbody>
-            <%= question.question %>
+            <% question.forEach( question => { %>
+              <tr>
+                <th scope="row"><%= question.question %></th>
+              </tr>
+              <% }); %> 
           </tbody>
           </table>
     </main>
