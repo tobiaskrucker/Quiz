@@ -118,12 +118,20 @@ router.get('/dashboard', (req, res) => {
 
 // Modulverwaltung-Route
 router.get('/modmanagement', async (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  } 
   const module = await User.find({});
   res.render('modmanagement.ejs', { user: req.session.user, module: module });
 });
 
 // Fragenverwaltung-Route
 router.post('/moduleselect', async (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
   const { moduleselect } = req.body;
   const module = await User.find({});
   const question = await Question.find({});

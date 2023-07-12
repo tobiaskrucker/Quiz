@@ -6,7 +6,7 @@
 </head>
 <body class="bg-light">
   <%- include('./partials/header'); %>
- 
+  <%- include('./partials/modalNoAdmin'); %>
     <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
       <h5 class="border-bottom border-gray pb-2 mb-0">
         <p>Fragenverwaltung</p>
@@ -18,7 +18,7 @@
       <div class="media text-muted pt-3">
       </div>
         <a href="/modmanagement" class="btn btn-secondary" role="button">Modulauswahl</a>
-        <a href="/addQuestion" class="btn btn-dark" role="button">Frage hinzufügen</a>
+        <a href="/addQuestion" class="btn btn-dark" role="button">Neue Frage anlegen</a>
       <div class="media text-muted pt-3">
       </div>
         <!-- Tabelle aller vorhandenen Fragen -->
@@ -37,5 +37,13 @@
           </tbody>
           </table>
     </main>
+    <% if (user.role !== 'admin') { %>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var myModal = new bootstrap.Modal(document.getElementById('modalNoAdmin'));
+          myModal.show();
+        });
+      </script>
+    <% } %>
 </body>
 </html>
