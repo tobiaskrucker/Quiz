@@ -7,9 +7,9 @@ const questionSchema = new mongoose.Schema({
   answer3: String,
   answer4: String,
   explanation: String,
-  modul: {
+  module: {
     type: mongoose.ObjectId,
-    ref: 'Modul'
+    ref: 'Module'
   }
 
 });

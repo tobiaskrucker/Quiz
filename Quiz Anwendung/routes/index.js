@@ -3,6 +3,8 @@ const router = express.Router();
 
 const User = require('../models/user');
 const Question = require('../models/question');
+const Module = require('../models/module');
+const SelectedModule = require('../models/selectedModule');
 const { model } = require('mongoose');
 
 // Registrierungsroute
@@ -118,24 +120,46 @@ router.get('/dashboard', (req, res) => {
 
 // Modulverwaltung-Route
 router.get('/modmanagement', async (req, res) => {
-  // Überprüfen, ob der Benutzer angemeldet ist
+  try{
+    // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
   } 
-  const module = await User.find({});
+  let module = await Module.find({});
+  // Überprüfen, ob es bereits ein Modul gibt. Falls nicht, wird ein "TestModul" erstellt
+  if(module.length === 0){
+    module = new Module({name: "TestModul"})
+    await module.save();
+  }
+  const user = await User.find({});
   res.render('modmanagement.ejs', { user: req.session.user, module: module });
+}catch(error){
+  console.log("Modulaufruf fehlgeschlagen")
+}
+
 });
 
 // Fragenverwaltung-Route
 router.post('/moduleselect', async (req, res) => {
-  // Überprüfen, ob der Benutzer angemeldet ist
+  try{
+    // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
   }
+  // ausgewähltes Modul in der Datenbank als "SelectedModul" speichern
   const { moduleselect } = req.body;
-  const module = await User.find({});
-  const question = await Question.find({});
-  res.render('qmanagement.ejs', { user: req.session.user, module: module, moduleselect: moduleselect, question: question });
+  let selectedModule = await SelectedModule.findOne();
+  if (!selectedModule) {
+    selectedModule = new SelectedModule();
+  }
+  selectedModule.name = moduleselect;
+  await selectedModule.save();
+  const module = await Module.findOne({name: selectedModule.name})
+  const question = await Question.find({module: module._id});
+  res.render('qmanagement.ejs', { user: req.session.user, SelectedModule: selectedModule, module: module, moduleselect: moduleselect, question: question });
+}catch(error){
+  console.log("Fragenaufruf fehlgeschlagen")
+}
 });
 
 router.get('/qmanagement', async (req, res) => {
@@ -161,19 +185,25 @@ router.get('/addModule', (req, res) => {
 //Hier muss noch der POST-Command analog des Hinzufügens einer Frage rein
 
 //AddQuestion-Route
-router.get('/addQuestion', (req, res) => {
+router.get('/addQuestion', async(req, res) => {
+  try{
   // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  res.render('addQuestion.ejs',  { user: req.session.user });
+  let moduleselect = await SelectedModule.findOne();
+  res.render('addQuestion.ejs',  { user: req.session.user, moduleselect: moduleselect });
+}catch(error){
+  console.log("Aufruf Formular für neue Frage fehlgeschlagen")
+}
 });
 
 
 router.post('/addQuestion', async (req, res) => {
-  const formData = req.body;
-  
   try {
+  const formData = req.body;
+  let selectedModule = await SelectedModule.findOne();
+  let module = await Module.findOne({name: selectedModule.name});
     // Informationen aus dem Formular in DB speichern
     const newQuestion = new Question({
         question: formData.question,
@@ -181,12 +211,11 @@ router.post('/addQuestion', async (req, res) => {
         answer2: formData.answer2,
         answer3: formData.answer3,
         answer4: formData.answer4, 
-        explanation: formData.explanation       
- })
-
-    await newQuestion.save();
+        explanation: formData.explanation,
+        module: module._id        
+ })    
+ await newQuestion.save();
    
-    
     // Weiterleiten zum Dashboard
     res.redirect('/dashboard');
   } catch (error) {

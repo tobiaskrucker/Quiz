@@ -31,8 +31,8 @@
           <tbody>
             <% module.forEach( module => { %>
               <tr>
-                <th scope="row"><%= module.email %></th>
-                <td><button type="submit" class="btn btn-secondary btn-sm" name="moduleselect" value="<%= module.email %>">Auswählen</button></td>
+                <th scope="row"><%= module.name %></th>
+                <td><button type="submit" class="btn btn-secondary btn-sm" name="moduleselect" value="<%= module.name %>">Auswählen</button></td>
               </tr>
               <% }); %> 
           </tbody>
