@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <%- include('./partials/head'); %>
+
+</head>
+<body class="bg-light">
+  <%- include('./partials/header'); %>
+ 
+    <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+      
+        <div class="media text-muted pt-3">
+      </div>
+      <h5>
+        <p>Fügen Sie ein neues Modul hinzu</p>
+      </h5>
+    </main>
+    <section class="vh-100">
+        <div class="container py-5 h-100">          
+              <form action="/addModule" method="POST">
+                
+                <!-- Module input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form1Example13">Name des Moduls:</label>
+                  <input type="text" name="name" class="form-control form-control-lg" required/>
+                </div>
+
+                <!-- Submit button -->
+                <div class="d-flex align-items-center justify-content-center pb-4">
+                  <button type="submit" class="btn btn-dark btn-lg btn-block">Speichern</button>
+                </div>
+              </form>
+              
+            </div>
+      </section>
+</body>
+</html>

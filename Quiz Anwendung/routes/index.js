@@ -182,7 +182,20 @@ router.get('/addModule', (req, res) => {
   res.render('addModule.ejs',  { user: req.session.user });
 });
 
-//Hier muss noch der POST-Command analog des Hinzufügens einer Frage rein
+router.post('/addModule', async (req, res) => {
+  try {
+  const formData = req.body;
+    // Informationen aus dem Formular in DB speichern
+    const newModule = new Module({
+        name: formData.name,
+    })
+    await newModule.save();
+    // Weiterleiten zur Modulübersicht
+    res.redirect('/modmanagement');
+  }catch(error){
+    console.log("Aufruf Formular für neues Modul fehlgeschlagen")
+  }
+});
 
 //AddQuestion-Route
 router.get('/addQuestion', async(req, res) => {
@@ -226,3 +239,4 @@ router.post('/addQuestion', async (req, res) => {
 
 
 module.exports = router;
+
