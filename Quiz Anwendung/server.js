@@ -32,7 +32,9 @@ app.use(express.static(__dirname + '/assets'));
 
 // Routers registrieren
 const mainRouter = require('./routes/index');
+const gameRouter = require('./routes/game');
 app.use('/', mainRouter);
+app.use('/', gameRouter);
 
 // Server starten
 app.listen(3000, () => {

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IUQuiz</title>
+  <%- include('./partials/head'); %>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .correct-answer {
+      background-color: #c3e6c5 !important;
+    }
+  </style>
+</head>
+<body class="bg-light">
+    <%- include('./partials/header'); %>
+   
+      <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+        <div class="container">
+            <h1>IU Quiz</h1>
+            <p>Duellmodus</p>
+
+            <% let questions = []; %>
+            <% for (let i = 0; i < 2; i++) { %>
+              <% questions[i] = {
+                  question: game.questions[i].question,
+                  rightAnswer: game.questions[i].rightAnswer
+                }; %>
+              <div class="card mb-4">
+                <div class="card-header">Question <%= i + 1 %>: <%= game.questions[i].question %></div>
+                <div class="card-body">
+                  <% let options = [game.questions[i].rightAnswer, game.questions[i].answer2, game.questions[i].answer3, game.questions[i].answer4]; %>
+                  <% options = options.sort(function() { return 0.5 - Math.random() }); %>
+                  <% for (let j = 0; j < options.length; j++) { %>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="q<%= i + 1 %>" id="q<%= i + 1 %>-option-<%= j + 1 %>" value="<%= options[j] %>">
+                      <label class="form-check-label" for="q<%= i + 1 %>-option-<%= j + 1 %>">
+                        <%= String.fromCharCode(97 + j) + ') ' + options[j] %>
+                      </label>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+              <div class="alert alert-secondary" role="alert" style ="display: none">
+                Erkkärung: <%= game.questions[i].explanation %>
+              </div>
+            <% } %>
+
+
+            <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+        </div>
+      </main>
+      
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script>
+        document.getElementById('submitButton').addEventListener('click', function() {
+          // Erklärung zur Frage anzeigen
+          const elements = document.querySelectorAll(".alert.alert-secondary");
+            elements.forEach(element => {
+            element.style.display = 'block';
+          });
+
+          // Prüfen, ob Frage richtig beantwortet wurde
+          let cards = document.querySelectorAll('.card');
+          cards.forEach(function(card, i) {
+            let selectedOption = cards.querySelector();
+            let correctAnswer = game.questions[i].rightAnswer;
+            if (selectedOption && selectedOption.value === correctAnswer) {
+             // richtige Frage grün markieren
+              card.classList.add('correct-answer');
+             // Punkte dem Spiel hinzufügen 
+              game.points[userInGame] += 3;
+              
+              // 
+            }
+          });
+        });
+      </script>
+      
+      
+      
+     
+      
+</body>
+</html>
