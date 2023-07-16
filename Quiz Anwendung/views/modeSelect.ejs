@@ -8,16 +8,12 @@
   <%- include('./partials/header'); %>
  
     <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
-      <h6 class="border-bottom border-gray pb-2 mb-0">
-        Willkommen, <%= user.username %>!
-      </h6>
-        <div class="media text-muted pt-3">
-      </div>
       <h5>
-        <p>Spielsitzungen</p>
+        <p>Spielmodus auswählen</p>
       </h5>
       <div class="d-flex align-items-center justify-content-left pb-4">
-        <a href="/modeselect"><button class="btn btn-dark btn-m btn-block">Neues Spiel</button></a>
+        <button class="btn btn-dark btn-m btn-block m-2">Duell</button>
+        <button class="btn btn-dark btn-m btn-block">Kollaborativ</button>
       </div>
     </main>
 

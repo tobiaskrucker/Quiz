@@ -118,6 +118,15 @@ router.get('/dashboard', (req, res) => {
   res.render('dashboard.ejs', { user: req.session.user });
 });
 
+// Modeselect-Route
+router.get('/modeselect', (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  res.render('modeSelect.ejs', { user: req.session.user });
+});
+
 // Modulverwaltung-Route
 router.get('/modmanagement', async (req, res) => {
   try{
