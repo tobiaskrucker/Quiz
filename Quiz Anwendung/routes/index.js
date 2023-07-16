@@ -125,12 +125,13 @@ router.get('/modmanagement', async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   } 
-  let module = await Module.find({});
+  const module = await Module.find({});
   // Überprüfen, ob es bereits ein Modul gibt. Falls nicht, wird ein "TestModul" erstellt
-  if(module.length === 0){
+  /*if(module.length === 0){
     module = new Module({name: "TestModul"})
     await module.save();
-  }
+  }*/
+
   const user = await User.find({});
   res.render('modmanagement.ejs', { user: req.session.user, module: module });
 }catch(error){
@@ -214,29 +215,104 @@ router.get('/addQuestion', async(req, res) => {
 
 router.post('/addQuestion', async (req, res) => {
   try {
-  const formData = req.body;
-  let selectedModule = await SelectedModule.findOne();
-  let module = await Module.findOne({name: selectedModule.name});
-    // Informationen aus dem Formular in DB speichern
-    const newQuestion = new Question({
-        question: formData.question,
-        rightAnswer: formData.rightAnswer,
-        answer2: formData.answer2,
-        answer3: formData.answer3,
-        answer4: formData.answer4, 
-        explanation: formData.explanation,
-        module: module._id        
- })    
- await newQuestion.save();
+    // Überprüfen, ob der Benutzer angemeldet ist
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    const formData = req.body;
+    let selectedModule = await SelectedModule.findOne();
+    let module = await Module.findOne({name: selectedModule.name});
+      // Informationen aus dem Formular in DB speichern
+      const newQuestion = new Question({
+          question: formData.question,
+          rightAnswer: formData.rightAnswer,
+          answer2: formData.answer2,
+          answer3: formData.answer3,
+          answer4: formData.answer4, 
+          explanation: formData.explanation,
+          module: module._id        
+    })    
+    await newQuestion.save();
    
-    // Weiterleiten zum Dashboard
-    res.redirect('/dashboard');
+    // Weiterleiten zum Modul
+    res.redirect('/modmanagement');
   } catch (error) {
     console.error('Frage kann nicht angelegt werden: ', error);
     res.render('addQuestion', { errorMessage: error.message });
   }
 });
 
+
+//EditQuestion-Route
+router.get('/editQuestion/:id', async (req, res) => {
+  try {
+    // Überprüfen, ob der Benutzer angemeldet ist
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    if(req.session.user.role != "admin") {
+      return res.redirect('/dashboard');
+    }
+    let question = await Question.findOne({_id: req.params.id});
+    console.log(question);
+    if(!question) {
+      // Weiterleiten zum Modul
+      res.redirect('/modmanagement');
+    }
+
+    let moduleselect = await SelectedModule.findOne();
+    res.render('addQuestion.ejs',  { user: req.session.user, moduleselect: moduleselect, questionData: question });
+  } 
+  catch (error) {
+    console.log("Aufruf Formular für Frage bearbeiten fehlgeschlagen")
+  }
+});
+
+//SaveQuestion-Route
+router.post('/saveQuestion/:id', async (req, res) => {
+  try {
+    // Überprüfen, ob der Benutzer angemeldet ist
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    if(req.session.user.role != "admin") {
+      return res.redirect('/dashboard');
+    }
+    const formData = req.body;
+    await Question.updateOne({_id: req.params.id}, { 
+      question: formData.question,
+      rightAnswer: formData.rightAnswer,
+      answer2: formData.answer2,
+      answer3: formData.answer3,
+      answer4: formData.answer4, 
+      explanation: formData.explanation
+    });
+    // Weiterleiten zum Modul
+    res.redirect('/modmanagement');
+  } 
+  catch (error) {
+    console.log("Speichern der zu bearbeitenden Frage fehlgeschlagen")
+  }
+});
+
+//DeleteQuestion-Route
+router.post('/deleteQuestion/:id', async (req, res) => {
+  try {
+    // Überprüfen, ob der Benutzer angemeldet ist
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    if(req.session.user.role != "admin") {
+      return res.redirect('/dashboard');
+    }
+    await Question.deleteOne({_id: req.params.id});
+    // Weiterleiten zum Modul
+    res.redirect('/modmanagement');
+  } 
+  catch (error) {
+    console.log("Löschen der zu bearbeitenden Frage fehlgeschlagen")
+  }
+});
 
 module.exports = router;
 

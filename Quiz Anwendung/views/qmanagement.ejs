@@ -22,20 +22,24 @@
       <div class="media text-muted pt-3">
       </div>
         <!-- Tabelle aller vorhandenen Fragen -->
+        <% if(question.length > 0) { %> 
         <table id="ModulesTable" class="table table-hover">
           <thead class="thead-dark">
           <tr>
             <th>Fragentitel</th>
+            <th>Auswahl</th>
           </tr>
           </thead>
           <tbody>
             <% question.forEach( question => { %>
               <tr>
                 <th scope="row"><%= question.question %></th>
+                <td><a class="btn btn-secondary btn-sm" name="moduleselect" href="/editQuestion/<%= question._id %>">Bearbeiten</a></td>
               </tr>
               <% }); %> 
           </tbody>
-          </table>
+        </table>
+        <% } %> 
     </main>
     <% if (user.role !== 'admin') { %>
       <script>
