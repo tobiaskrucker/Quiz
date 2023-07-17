@@ -1,0 +1,168 @@
+<!-- Anzeige der Spielübersicht -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <%- include('./partials/head'); %>
+</head>
+<body class="bg-light">
+  <%- include('./partials/header'); %>
+  <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+    <h4 class="border-bottom border-gray pb-2 mb-0">
+      <p>Spielübersicht</p>
+    </h4>
+    <div class="media text-muted pt-3">
+    </div>
+    <!-- Hier müssen noch die Variablen für den Spielpartner und den ausgewählten Spielmodus eingefügt werden, bislang nicht definiert -->
+    <p>Sie befinden sich in einem <span class="badge bg-secondary">%= gamemode %</span> mit Fragen aus dem Modul <span class="badge bg-secondary">%= gamemodule %</span></p>
+    <div class="media text-muted pt-3">
+    </div>
+      <!-- Hier müssen noch die Vjeweiligen Links eingefügt werden, bislang nicht definiert -->
+      <a href="/" class="btn btn-secondary" role="button">zurück</a> 
+      <a href="/" class="btn btn-dark" role="button">Nächste Runde spielen</a>    
+    <div class="media text-muted pt-5">
+    </div>
+    <h5 class="border-bottom border-gray pb-2 mb-2">
+      <!-- Hier müssen noch die Variablen für die jeweiligen Punkte eingefügt werden, bislang nicht definiert -->
+      <p>Spielstand:</p>
+    </h5>
+      <div class="container">
+        <div class="row ">
+          <div class="col">
+          </div>
+          <div class="col text-center">
+            <h4><span class="badge bg-primary"><%= user.username %></span></h4>
+          </div>
+          <div class="col text-center">  
+            <h4><span class="badge bg-primary">%= userselect %</span></h4>
+          </div>
+        </div>  
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+          </div>
+          <div class="col text-center">
+            <h5><span class="badge bg-primary">%= user.points %</span></h5>
+          </div>
+          <div class="col text-center">
+            <h5><span class="badge bg-primary">%= opponent.points %</span></h5>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 1:</h6>
+          </div>
+          <div class="col text-center">
+            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
+            <% if(user.answer1 == 'true'){ %>
+            <button type="button" class="btn btn-success btn-sm"></button>
+            <% } else if(user.answer1 == 'false'){ %>
+            <button type="button" class="btn btn-danger btn-sm"></button>
+            <% } else { %>
+            <button type="button" class="btn btn-secondary btn-sm"></button>
+            <% } %>
+            <% if(user.answer2 == 'true'){ %>
+            <button type="button" class="btn btn-success btn-sm"></button>
+            <% } else if(user.answer2 == 'false'){ %>
+            <button type="button" class="btn btn-danger btn-sm"></button>
+            <% } else { %>
+            <button type="button" class="btn btn-secondary btn-sm"></button>
+            <% } %>
+          </div>
+          <div class="col text-center">
+            <% if(opponent.answer1 == 'true'){ %>
+            <button type="button" class="btn btn-success btn-sm"></button>
+            <% } else if(opponent.answer1 == 'false'){ %>
+            <button type="button" class="btn btn-danger btn-sm"></button>
+            <% } else { %>
+            <button type="button" class="btn btn-secondary btn-sm"></button>
+            <% } %>
+            <% if(opponent.answer2 == 'true'){ %>
+            <button type="button" class="btn btn-success btn-sm"></button>
+            <% } else if(opponent.answer2 == 'false'){ %>
+            <button type="button" class="btn btn-danger btn-sm"></button>
+            <% } else { %>
+            <button type="button" class="btn btn-secondary btn-sm"></button>
+            <% } %>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 2:</h6>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 3:</h6>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 4:</h6>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 5:</h6>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 6:</h6>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+        </div>
+        <div class="row border-bottom border-gray pb-2 mb-2">
+          <div class="col">
+            <h6>Runde 7:</h6>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-secondary btn-sm">1</button>
+            <button type="button" class="btn btn-secondary btn-sm">2</button>
+          </div>
+        </div>
+      </div>   
+  </main>
+</body>
+</html>
