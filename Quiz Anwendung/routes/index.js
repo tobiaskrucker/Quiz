@@ -158,14 +158,12 @@ router.post('/selectModule', async (req, res) => {
 
   var openGame;
 
-if(games.length > 0){
-  
-  games.forEach( function(game){
-
-      if (game.users.length < 2){
-        game.users.forEach( function(user){
-
-          if(user != req.session.user._id){
+  if(games.length > 0) {
+    
+    games.forEach( function(game) {
+      if (game.users.length < 2) {
+        game.users.forEach( function(user) {
+          if(user != req.session.user._id) {
             openGame = game._id;
             game.users[1] = req.session.user._id;
             game.save();
@@ -174,21 +172,43 @@ if(games.length > 0){
           }
         })
       }
+    });
   }
-  );
-}
 
-if(!openGame){
-  var newGame = new Game();
-  newGame.users[0] = req.session.user;
-  newGame.points[0] = 0;
-  newGame.points[1] = 0;
-  newGame.modus = req.session.setup;
-  newGame.module = formData.module;
-  await newGame.save(); 
+  if(!openGame) {
+    var newGame = new Game();
+    newGame.users[0] = req.session.user;
+    newGame.points[0] = 0;
+    newGame.points[1] = 0;
+    newGame.modus = req.session.setup;
+    newGame.module = formData.module;
 
-  res.redirect('/dashboard');
-}
+    //14 zufällige Fragen ermitteln
+    let gameQuestions = [];
+
+    const questions = await Question.find({ module: formData.module });
+
+    if (questions.length < 14){
+      res.redirect('/dashboard');
+      console.log("Nicht genügend Fragen vorhanden");
+      return;
+    }
+
+    while (gameQuestions.length < 14){
+      let randomIndex = Math.floor(Math.random()*questions.length);
+      let randomQuestion = questions[randomIndex];
+
+      if (!gameQuestions.includes(randomQuestion)){
+        gameQuestions.push(randomQuestion);
+      }
+    }
+    newGame.questions = gameQuestions;
+
+
+    await newGame.save(); 
+
+    res.redirect('/dashboard');
+  }
 
 });
 
