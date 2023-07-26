@@ -5,6 +5,7 @@ const User = require('../models/user');
 const Question = require('../models/question');
 const Module = require('../models/module');
 const SelectedModule = require('../models/selectedModule');
+const Game = require('../models/game');
 const { model } = require('mongoose');
 
 // Registrierungsroute
@@ -125,6 +126,70 @@ router.get('/modeselect', (req, res) => {
     return res.redirect('/login');
   }
   res.render('modeSelect.ejs', { user: req.session.user });
+});
+
+//Modulselect-Route
+router.post('/selectMode', async (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  // Button bestimmt, welcher Modus ausgewählt wird und speichert in der Datenbank
+  const formData = req.body;
+ // const setup = await Setup.create({mode: formData.mode});
+  
+
+  req.session.setup = formData.mode;
+  // Weiterleitung zur Modulauswahl
+
+  const module = await Module.find();
+  res.render('modulSelect.ejs', { user: req.session.user, setup: req.session.setup, module: module });
+});
+
+//Gamesetup-Route
+router.post('/selectModule', async (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  const formData = req.body;
+  const games = await Game.find({ modus: req.session.setup, module: formData.module })
+
+  var openGame;
+
+if(games.length > 0){
+  
+  games.forEach( function(game){
+
+      if (game.users.length < 2){
+        game.users.forEach( function(user){
+
+          if(user != req.session.user._id){
+            openGame = game._id;
+            game.users[1] = req.session.user._id;
+            game.save();
+            res.redirect('/dashboard');
+            return;
+          }
+        })
+      }
+  }
+  );
+}
+
+if(!openGame){
+  var newGame = new Game();
+  newGame.users[0] = req.session.user;
+  newGame.points[0] = 0;
+  newGame.points[1] = 0;
+  newGame.modus = req.session.setup;
+  newGame.module = formData.module;
+  await newGame.save(); 
+
+  res.redirect('/dashboard');
+}
+
 });
 
 // Modulverwaltung-Route

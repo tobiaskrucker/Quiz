@@ -1,0 +1,35 @@
+<DOCTYPE html>
+<html lang="de">
+<head>
+  <%- include('./partials/head'); %>
+</head>
+<body class="bg-light">
+  <%- include('./partials/header'); %>
+    <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+      <h5>
+        <p>Modul auswählen</p>
+      </h5>
+        <% if(module.length > 0) { %> 
+          <form action="/selectModule" method="POST">
+            <table id="ModulesTable" class="table table-hover">
+              <thead class="thead-dark">
+              <tr>
+                <th>Modulname</th>
+                <th>Auswahl</th>
+              </tr>
+              </thead>
+              <tbody>
+                <% module.forEach( function(data) { %>
+                  <tr>
+                    <th scope="row"><%= data.name %></th>
+                    <td><button type="submit" class="btn btn-secondary btn-sm" name="module" value="<%= data._id %>">Auswählen</button></td>
+                  </tr>
+                <% }); %> 
+              </tbody>
+            </table>
+          </form>
+        <% } else { %> 
+          <p>Noch kein Modul vohanden</p>
+        <% } %>
+</body>
+</html>

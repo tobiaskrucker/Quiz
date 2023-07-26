@@ -6,16 +6,19 @@
 </head>
 <body class="bg-light">
   <%- include('./partials/header'); %>
- 
     <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+
       <h5>
         <p>Spielmodus auswählen</p>
       </h5>
-      <div class="d-flex align-items-center justify-content-left pb-4">
-        <button class="btn btn-dark btn-m btn-block m-2">Duell</button>
-        <button class="btn btn-dark btn-m btn-block">Kollaborativ</button>
-      </div>
-    </main>
 
+      <div class="d-flex align-items-center justify-content-left pb-4">
+        <form action="/selectMode" method="POST">
+          <button id="duellButton" name="mode" value="Duell" type="submit" class="btn btn-dark btn-m btn-block m-2">Duell</button>
+          <button id="coopButton" name="mode" value="Kollaborativ" type="submit" class="btn btn-dark btn-m btn-block m-2">Kollaborativ</button>
+        </form>
+      </div>
+
+    </main>
 </body>
 </html>
