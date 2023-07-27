@@ -110,12 +110,16 @@ router.post('/login', async (req, res) => {
 });
 
 // Dashboard-Route
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', async ( req, res) => {
   // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  res.render('dashboard.ejs', { user: req.session.user });
+  const game = await Game.find({users: req.session.user._id});
+  const module = await Module.find();
+
+  res.render('dashboard.ejs', { user: req.session.user, game: game, module: module});
+  
 });
 
 // Modeselect-Route
@@ -156,22 +160,21 @@ router.post('/selectModule', async (req, res) => {
   const games = await Game.find({ modus: req.session.setup, module: formData.module })
 
   var openGame;
-
+  
   if(games.length > 0) {
-    
-    games.forEach( function(game) {
-      if (game.users.length < 2) {
-        game.users.forEach( function(user) {
-          if(user != req.session.user._id) {
-            openGame = game._id;
-            game.users[1] = req.session.user._id;
-            game.save();
+    for(game = 0; game < games.length; game++) {
+      if(games[game].users.length < 2) {
+        for(user = 0; user < games[game].users.length; user++) {
+          if(games[game].users[user] != req.session.user._id) {
+            openGame = games[game]._id;
+            games[game].users[1] = req.session.user._id;
+            games[game].save();
             res.redirect('/dashboard');
             return;
           }
-        })
+        }
       }
-    });
+    }
   }
 
   if(!openGame) {
