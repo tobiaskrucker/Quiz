@@ -21,6 +21,7 @@
       </div>
       <!-- Tabelle aller vorhandenen Module -->
       <% if(module.length > 0) { %> 
+      <form action="/moduleselect" method="POST">
         <table id="ModulesTable" class="table table-hover">
           <thead class="thead-dark">
           <tr>
@@ -32,14 +33,12 @@
             <% module.forEach( function(data) { %>
               <tr>
                 <th scope="row"><%= data.name %></th>
-                <td>
-                  <form action="/moduleselect/<%= data._id %>" method="POST">
-                  <button type="submit" class="btn btn-secondary btn-sm" name="moduleselect" value="<%= data.name %>">Auswählen</button></td>
-                  </form>
+                <td><button type="submit" class="btn btn-secondary btn-sm" name="moduleselect" value="<%= data.name %>">Auswählen</button></td>
               </tr>
               <% }); %> 
           </tbody>
         </table>
+      </form>
       <% } %> 
     </main>
     <% if (user.role !== 'admin') { %>

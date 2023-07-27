@@ -4,11 +4,10 @@ const router = express.Router();
 const User = require('../models/user');
 const Question = require('../models/question');
 const Module = require('../models/module');
+const SelectedModule = require('../models/selectedModule');
 const Game = require('../models/game');
 const { model } = require('mongoose');
 
-/*
-wird nicht mehr benötigt
 // Duellroute
 router.get('/game', async (req, res) => {
 
@@ -26,7 +25,7 @@ router.get('/game', async (req, res) => {
     game.points[0] = 0;
     game.points[1] = 0;
     game.modus = "Duell";
-    game.module = Module.findOne({_id: req.params.id});
+    //game.module = SelectedModule.findOne();
     userInGame = 0;
   }
   else{
@@ -61,6 +60,6 @@ router.get('/game', async (req, res) => {
   res.render('duell.ejs', { user: req.session.user, game: game, countQuestion: countQuestion, userInGame: userInGame });
 });
 
-*/
+
 
 module.exports = router;
