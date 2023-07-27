@@ -407,5 +407,40 @@ router.post('/deleteQuestion/:id', async (req, res) => {
   }
 });
 
+//overviewGame-Route
+router.get('/overviewGame/:id', async (req, res) => {
+  try {
+    // Überprüfen, ob der Benutzer angemeldet ist
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+    
+    const gameData = await Game.findOne({ _id: req.params.id });
+
+    const answerPair1 = [];
+    const answerPair2 = [];
+
+    for(answer = 0; answer < 14; answer += 2) {
+      answerPair1.push({ answer1: gameData.answers1[answer], answer2: gameData.answers1[answer + 1] });
+      answerPair2.push({ answer1: gameData.answers2[answer], answer2: gameData.answers2[answer + 1] });
+    }
+
+    const userNames = [];
+
+    for(user = 0; user < gameData.users.length; user++) {
+      const userData = await User.findOne({ _id: gameData.users[user] });
+      userNames.push({ username: userData.username });
+    }
+
+    const module = await Module.findOne({ _id: gameData.module });
+
+
+    res.render('overviewGame.ejs',  { user: req.session.user, game: gameData, answers1: answerPair1, answers2: answerPair2, userNames: userNames, moduleName: module.name });
+  } 
+  catch (error) {
+    console.log("Aufruf Spielsitzung fehlgeschlagen");
+  }
+});
+
 module.exports = router;
 

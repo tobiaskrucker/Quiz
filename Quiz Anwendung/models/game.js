@@ -21,6 +21,10 @@ const gameSchema = new mongoose.Schema({
     ref: 'Module'
   }],
 
+  answers1: [Boolean],
+
+  answers2: [Boolean],
+
 });
 
 const Game = mongoose.model('Game', gameSchema);

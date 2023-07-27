@@ -13,7 +13,7 @@
     <div class="media text-muted pt-3">
     </div>
     <!-- Hier müssen noch die Variablen für den Spielpartner und den ausgewählten Spielmodus eingefügt werden, bislang nicht definiert -->
-    <p>Sie befinden sich in einem <span class="badge bg-secondary"><%= gamemode %></span> mit Fragen aus dem Modul <span class="badge bg-secondary"><%= gamemodule %></span></p>
+    <p>Sie befinden sich in einem <span class="badge bg-secondary"><%= game.modus %></span> mit Fragen aus dem Modul <span class="badge bg-secondary"><%= moduleName %></span></p>
     <div class="media text-muted pt-3">
     </div>
       <!-- Hier müssen noch die Vjeweiligen Links eingefügt werden, bislang nicht definiert -->
@@ -30,288 +30,74 @@
           <div class="col">
           </div>
           <div class="col text-center">
-            <h4><span class="badge bg-primary"><%= user.username %></span></h4>
+            <h4><span class="badge bg-primary"><%= userNames[0].username %></span></h4>
           </div>
           <div class="col text-center">  
-            <h4><span class="badge bg-primary"><%= userselect %></span></h4>
+            <h4>
+              <% if(userNames.length > 1) { %>
+                <span class="badge bg-primary"><%= userNames[1].username %></span>
+              <% } %>
+            </h4>
           </div>
         </div>  
         <div class="row border-bottom border-gray pb-2 mb-2">
           <div class="col">
           </div>
           <div class="col text-center">
-            <h5><span class="badge bg-primary"><%= user.points %></span></h5>
+            <h5><span class="badge bg-primary"><%= game.points[0] %></span></h5>
           </div>
           <div class="col text-center">
-            <h5><span class="badge bg-primary"><%= opponent.points %></span></h5>
+            <h5><span class="badge bg-primary"><%= game.points[1] %></span></h5>
           </div>
         </div>
+
+        <%
+        for(round = 0; round < 7; round++) {
+        %>
+
         <div class="row border-bottom border-gray pb-2 mb-2">
           <div class="col">
-            <h6>Runde 1:</h6>
+            <h6>Runde <%= round+1 %>:</h6>
           </div>
           <div class="col text-center">
             <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer1 == 'true'){ %>
+            <% if(answers1[round].answer1 == true){ %>
             <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer1 == 'false'){ %>
+            <% } else if(answers1[round].answer1 == false){ %>
             <button type="button" class="btn btn-danger btn-sm"></button>
             <% } else { %>
             <button type="button" class="btn btn-secondary btn-sm"></button>
             <% } %>
-            <% if(user.answer2 == 'true'){ %>
+            <% if(answers1[round].answer2 == true){ %>
             <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer2 == 'false'){ %>
+            <% } else if(answers1[round].answer2 == false){ %>
             <button type="button" class="btn btn-danger btn-sm"></button>
             <% } else { %>
             <button type="button" class="btn btn-secondary btn-sm"></button>
             <% } %>
           </div>
           <div class="col text-center">
-            <% if(opponent.answer1 == 'true'){ %>
+            <% if(answers2[round].answer1 == 'true'){ %>
             <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer1 == 'false'){ %>
+            <% } else if(answers2[round].answer1 == 'false'){ %>
             <button type="button" class="btn btn-danger btn-sm"></button>
             <% } else { %>
             <button type="button" class="btn btn-secondary btn-sm"></button>
             <% } %>
-            <% if(opponent.answer2 == 'true'){ %>
+            <% if(answers2[round].answer2 == 'true'){ %>
             <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer2 == 'false'){ %>
+            <% } else if(answers2[round].answer2 == 'false'){ %>
             <button type="button" class="btn btn-danger btn-sm"></button>
             <% } else { %>
             <button type="button" class="btn btn-secondary btn-sm"></button>
             <% } %>
           </div>
         </div>
-        <div class="row border-bottom border-gray pb-2 mb-2">
-          <div class="col">
-            <h6>Runde 2:</h6>
-          </div>
-          <div class="col text-center">
-            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer3 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer3 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(user.answer4 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer4 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-          <div class="col text-center">
-            <% if(opponent.answer3 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer3 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(opponent.answer4 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer4 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-        </div>
-        <div class="row border-bottom border-gray pb-2 mb-2">
-          <div class="col">
-            <h6>Runde 3:</h6>
-          </div>
-          <div class="col text-center">
-            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer5 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer5 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(user.answer6 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer6 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-          <div class="col text-center">
-            <% if(opponent.answer5 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer5 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(opponent.answer6 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer6 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-        </div>
-        <div class="row border-bottom border-gray pb-2 mb-2">
-          <div class="col">
-            <h6>Runde 4:</h6>
-          </div>
-          <div class="col text-center">
-            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer7 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer7 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(user.answer8 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer8 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-          <div class="col text-center">
-            <% if(opponent.answer7 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer7 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(opponent.answer8 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer8 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-        </div>
-        <div class="row border-bottom border-gray pb-2 mb-2">
-          <div class="col">
-            <h6>Runde 5:</h6>
-          </div>
-          <div class="col text-center">
-            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer9 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer9 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(user.answer10 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer10 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-          <div class="col text-center">
-            <% if(opponent.answer9 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer9 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(opponent.answer10 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer10 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-        </div>
-        <div class="row border-bottom border-gray pb-2 mb-2">
-          <div class="col">
-            <h6>Runde 6:</h6>
-          </div>
-          <div class="col text-center">
-            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer11 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer11 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(user.answer12 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer12 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-          <div class="col text-center">
-            <% if(opponent.answer11 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer11 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(opponent.answer12 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer12 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-        </div>
-        <div class="row border-bottom border-gray pb-2 mb-2">
-          <div class="col">
-            <h6>Runde 7:</h6>
-          </div>
-          <div class="col text-center">
-            <!-- Hier müssen noch die Variablen für die jeweiligen Runden eingefügt werden, bislang nicht definiert -->
-            <% if(user.answer13 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer13 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(user.answer14 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(user.answer14 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-          <div class="col text-center">
-            <% if(opponent.answer13 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer13 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-            <% if(opponent.answer14 == 'true'){ %>
-            <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(opponent.answer14 == 'false'){ %>
-            <button type="button" class="btn btn-danger btn-sm"></button>
-            <% } else { %>
-            <button type="button" class="btn btn-secondary btn-sm"></button>
-            <% } %>
-          </div>
-        </div>
+
+        <%
+        }
+        %>
+
       </div>   
   </main>
 </body>
