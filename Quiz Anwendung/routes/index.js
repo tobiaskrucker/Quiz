@@ -111,12 +111,15 @@ router.post('/login', async (req, res) => {
 });
 
 // Dashboard-Route
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', async ( req, res) => {
   // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  res.render('dashboard.ejs', { user: req.session.user });
+  const game = await Game.find({});
+  const module = await Module.find({});
+  res.render('dashboard.ejs', { user: req.session.user, game: game, module: module});
+  
 });
 
 // Modeselect-Route
@@ -134,14 +137,11 @@ router.post('/selectMode', async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  // Button bestimmt, welcher Modus ausgewählt wird und speichert in der Datenbank
+  // Modus wird über Button ausgewählt
   const formData = req.body;
- // const setup = await Setup.create({mode: formData.mode});
-  
-
   req.session.setup = formData.mode;
-  // Weiterleitung zur Modulauswahl
 
+  // Weiterleitung zur Modulauswahl
   const module = await Module.find();
   res.render('modulSelect.ejs', { user: req.session.user, setup: req.session.setup, module: module });
 });
@@ -153,13 +153,14 @@ router.post('/selectModule', async (req, res) => {
     return res.redirect('/login');
   }
 
+  // Modul wird über Button ausgewählt
   const formData = req.body;
   const games = await Game.find({ modus: req.session.setup, module: formData.module })
 
   var openGame;
 
+  // Prüfen auf offene Spiele
 if(games.length > 0){
-  
   games.forEach( function(game){
 
       if (game.users.length < 2){
@@ -178,6 +179,7 @@ if(games.length > 0){
   );
 }
 
+// Anlegen eines Spiels, falls keine offenen Spiele vorhanden sind
 if(!openGame){
   var newGame = new Game();
   newGame.users[0] = req.session.user;
