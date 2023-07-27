@@ -293,13 +293,13 @@ router.post('/addModule', async (req, res) => {
 });
 
 //AddQuestion-Route
-router.get('/addQuestion', async(req, res) => {
+router.get('/addQuestion/:id', async(req, res) => {
   try{
   // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  let moduleselect = await SelectedModule.findOne();
+  let moduleselect = await Module.findOne({_id: req.params.id});
   res.render('addQuestion.ejs',  { user: req.session.user, moduleselect: moduleselect });
 }catch(error){
   console.log("Aufruf Formular für neue Frage fehlgeschlagen")
@@ -307,15 +307,14 @@ router.get('/addQuestion', async(req, res) => {
 });
 
 
-router.post('/addQuestion', async (req, res) => {
+router.post('/addQuestion/:id', async (req, res) => {
   try {
     // Überprüfen, ob der Benutzer angemeldet ist
     if (!req.session.user) {
       return res.redirect('/login');
     }
     const formData = req.body;
-    let selectedModule = await SelectedModule.findOne();
-    let module = await Module.findOne({name: selectedModule.name});
+    let module = await Module.findOne({_id: req.params.id});
       // Informationen aus dem Formular in DB speichern
       const newQuestion = new Question({
           question: formData.question,
@@ -354,7 +353,7 @@ router.get('/editQuestion/:id', async (req, res) => {
       res.redirect('/modmanagement');
     }
 
-    let moduleselect = await SelectedModule.findOne();
+    let moduleselect = await Module.findOne({_id: question.module});
     res.render('addQuestion.ejs',  { user: req.session.user, moduleselect: moduleselect, questionData: question });
   } 
   catch (error) {
