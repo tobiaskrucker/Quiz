@@ -4,7 +4,6 @@ const router = express.Router();
 const User = require('../models/user');
 const Question = require('../models/question');
 const Module = require('../models/module');
-const SelectedModule = require('../models/selectedModule');
 const Game = require('../models/game');
 const { model } = require('mongoose');
 
