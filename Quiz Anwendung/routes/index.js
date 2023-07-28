@@ -180,6 +180,7 @@ router.post('/selectModule', async (req, res) => {
   if(!openGame) {
     var newGame = new Game();
     newGame.users[0] = req.session.user;
+    newGame.round = 0;
     newGame.points[0] = 0;
     newGame.points[1] = 0;
     newGame.modus = req.session.setup;
@@ -238,6 +239,21 @@ router.get('/modmanagement', async (req, res) => {
 
 // Fragenverwaltung-Route
 router.post('/moduleselect/:id', async (req, res) => {
+  try{
+    // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  const module = await Module.findOne({_id: req.params.id})
+  const question = await Question.find({module: module._id});
+  res.render('qmanagement.ejs', { user: req.session.user, module: module, moduleselect: module, question: question });
+}catch(error){
+  console.log("Fragenaufruf fehlgeschlagen")
+}
+});
+
+router.get('/moduleselect/:id', async (req, res) => {
   try{
     // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
@@ -323,7 +339,7 @@ router.post('/addQuestion/:id', async (req, res) => {
     await newQuestion.save();
    
     // Weiterleiten zum Modul
-    res.redirect('/modmanagement');
+    res.redirect('/moduleselect/' + newQuestion.module);
   } catch (error) {
     console.error('Frage kann nicht angelegt werden: ', error);
     res.render('addQuestion', { errorMessage: error.message });
@@ -367,6 +383,8 @@ router.post('/saveQuestion/:id', async (req, res) => {
       return res.redirect('/dashboard');
     }
     const formData = req.body;
+    console.log("formData: ");
+    console.log(formData);
     await Question.updateOne({_id: req.params.id}, { 
       question: formData.question,
       rightAnswer: formData.rightAnswer,
@@ -376,7 +394,8 @@ router.post('/saveQuestion/:id', async (req, res) => {
       explanation: formData.explanation
     });
     // Weiterleiten zum Modul
-    res.redirect('/modmanagement');
+    const questionData = await Question.findOne({_id: req.params.id});
+    res.redirect('/moduleselect/' + questionData.module);
   } 
   catch (error) {
     console.log("Speichern der zu bearbeitenden Frage fehlgeschlagen")
@@ -393,9 +412,10 @@ router.post('/deleteQuestion/:id', async (req, res) => {
     if(req.session.user.role != "admin") {
       return res.redirect('/dashboard');
     }
+    const questionData = await Question.findOne({_id: req.params.id});
     await Question.deleteOne({_id: req.params.id});
     // Weiterleiten zum Modul
-    res.redirect('/modmanagement');
+    res.redirect('/moduleselect/' + questionData.module);
   } 
   catch (error) {
     console.log("Löschen der zu bearbeitenden Frage fehlgeschlagen")

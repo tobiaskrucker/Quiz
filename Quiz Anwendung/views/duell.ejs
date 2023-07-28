@@ -19,47 +19,39 @@
         <div class="container">
             <h1>IU Quiz</h1>
             <p>Duellmodus</p>
-            
-            <% let questions = []; %>
-            <% for (let i = 0; i < 2; i++) { %>
-              <% questions[i] = {
-                  question: game.questions[i].question,
-                  rightAnswer: game.questions[i].rightAnswer
-                }; %>
-              <div class="card mb-4">
-                <div class="card-header">Question <%= i + 1 %>: <%= game.questions[i].question %></div>
-                <div class="card-body">
-                  <% let options = [game.questions[i].rightAnswer, game.questions[i].answer2, game.questions[i].answer3, game.questions[i].answer4]; %>
-                  <% options = options.sort(function() { return 0.5 - Math.random() }); %>
-                  <% for (let j = 0; j < options.length; j++) { %>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="q<%= i + 1 %>" id="q<%= i + 1 %>-option-<%= j + 1 %>" value="<%= options[j] %>">
-                      <label class="form-check-label" for="q<%= i + 1 %>-option-<%= j + 1 %>">
-                        <%= String.fromCharCode(97 + j) + ') ' + options[j] %>
-                      </label>
-                    </div>
-                  <% } %>
-                </div>
-                <%
-                if(game.modus == "Kollaborativ") {
-                %>
-                  <div class="input-group">
-                    <span class="input-group-text">Kommentar</span>
-                    <textarea class="form-control" name="comment"></textarea>
+            <form action="/answers/<%= game._id %>" method="POST">
+              <% let questions = []; %>
+              <% for (let i = game.round; i < game.round + 2; i++) { %>
+                <% questions[i] = {
+                    question: game.questions[i].question,
+                    rightAnswer: game.questions[i].rightAnswer
+                  }; %>
+                <div class="card mb-4">
+                  <div class="card-header">Question <%= i + 1 %>: <%= game.questions[i].question %></div>
+                  <div class="card-body">
+                    <% let options = [game.questions[i].rightAnswer, game.questions[i].answer2, game.questions[i].answer3, game.questions[i].answer4]; %>
+                    <% options = options.sort(function() { return 0.5 - Math.random() }); %>
+                    <% for (let j = 0; j < options.length; j++) { %>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q<%= i + 1 %>" id="q<%= i + 1 %>-option-<%= j + 1 %>" value="<%= options[j] %>">
+                        <label class="form-check-label" for="q<%= i + 1 %>-option-<%= j + 1 %>">
+                          <%= String.fromCharCode(97 + j) + ') ' + options[j] %>
+                        </label>
+                      </div>
+                    <% } %>
                   </div>
-                <% 
-                } 
-                %>
-              </div>
-              <div class="alert alert-secondary" role="alert" style ="display: none">
-                Erklärung: <%= game.questions[i].explanation %>
-              </div>
-            <% } %>
-                
+                  
+                </div>
+                <div class="alert alert-secondary" role="alert" style ="display: none">
+                  Erklärung: <%= game.questions[i].explanation %>
+                </div>
+              <% } %>
+                  
 
-            <button class="btn btn-primary" type="submit" id="submitButton" onclick="submitHandler('<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>')">Submit</button>
+              <button class="btn btn-primary" type="button" id="submitButton" onclick="submitHandler('<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>')">Submit</button>
 
-            <button class="btn btn-primary" type="next" id="nextButton" >Weiter</button>
+              <button class="btn btn-primary" type="submit" id="nextButton">Weiter</button>
+            </form>
         </div>
       </main>
       <script>
@@ -83,40 +75,40 @@
             nextButton.style.display = 'none';
           }
 
-        
+          // Prüfen, ob Antwort richig oder falsch
+          function submitHandler(game, user) {
+            console.log(user);
+            const cards = document.querySelectorAll(".card");
+            cards.forEach(function (card, i) {
+              let selectedOption = card.querySelector('input[type=radio]:checked');
+              let correctAnswer = game.questions[i].rightAnswer;
+              if (selectedOption && selectedOption.value === correctAnswer) {
+                // richtige Antwort grün markieren
+                selectedOption.parentElement.classList.add('correct-answer');
+                selectedOption.value = true;
+              } else {
+                selectedOption.parentElement.classList.add('false-answer');
+                selectedOption.value = false;
+              }
+              // Punkte vergeben
+              pointsHandler(game, user);
+            });
+          }
 
-// Prüfen, ob Antwort richig oder falsch
-function submitHandler(game, user) {
-  console.log(user);
-  const cards = document.querySelectorAll(".card");
-  cards.forEach(function (card, i) {
-    let selectedOption = card.querySelector('input[type=radio]:checked');
-    let correctAnswer = game.questions[i].rightAnswer;
-    if (selectedOption && selectedOption.value === correctAnswer) {
-      // richtige Antwort grün markieren
-      selectedOption.parentElement.classList.add('correct-answer');
-    } else {
-      selectedOption.parentElement.classList.add('false-answer');
-    }
-    // Punkte vergeben
-    pointsHandler(game, user);
-  });
-}
-
-function pointsHandler(game, user) {
-  const cards = document.querySelectorAll(".card");
-  cards.forEach(function (card, i) {
-    let selectedOption = card.querySelector('input[type=radio]:checked');
-    let correctAnswer = game.questions[i].rightAnswer;
-    if (selectedOption && selectedOption.value === correctAnswer) {
-      // dem User 3 Punkte zuweisen
-      if (game.users[0] === user._id) {
-        game.points[0] += 3;
-      } 
-    }
-    // keine Punkte vergeben
-  });
-}
+          function pointsHandler(game, user) {
+            const cards = document.querySelectorAll(".card");
+            cards.forEach(function (card, i) {
+              let selectedOption = card.querySelector('input[type=radio]:checked');
+              let correctAnswer = game.questions[i].rightAnswer;
+              if (selectedOption && selectedOption.value === correctAnswer) {
+                // dem User 3 Punkte zuweisen
+                if (game.users[0] === user._id) {
+                  game.points[0] += 3;
+                } 
+              }
+              // keine Punkte vergeben
+            });
+          }
 
         // Event-Listener für den Submit-Button
         document.getElementById('submitButton').addEventListener('click', function() {

@@ -17,10 +17,62 @@ router.get('/game/:id', async (req, res) => {
   }
   let game = await Game.findOne({_id: req.params.id}).populate("questions");
   await game.save();
-  if(game.modus === "Duell")
   res.render('duell.ejs', { user: req.session.user, game: game });
-  // Hier muss noch durch die Oberfläche des kollaborativen Mouds ersetzt werden
-  else res.render('duell.ejs', { user: req.session.user, game: game });
+});
+
+router.post('/answers/:id', async (req, res) => {
+
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  const formData = req.body;
+  const keys = Object.keys(formData);
+  console.log(formData);
+  console.log(keys);
+  console.log("erster wert: " + formData[keys[0]]);
+
+  //Antworten in Schema "Game" für die jeweilige Runde hinterlegen
+  const gameData = await Game.findOne({ _id: req.params.id })
+ 
+  var gameAnswers = [];
+
+  if(gameData.users[0] == req.session.user._id) {
+    gameAnswers = gameData.answers1;
+    console.log("gameData.answers1:");
+    console.log(gameAnswers);
+  }
+  else {
+    gameAnswers = gameData.answers2;
+    console.log("gameData.answers2:");
+    console.log(gameAnswers);
+  }
+
+  for(key = 0; key < keys.length; key++) {
+    gameAnswers.push(formData[keys[key]]);
+  }
+  
+  console.log("gameAnswers added:");
+  console.log(gameAnswers);
+
+  const round = gameData.round + 1;
+
+  if(gameData.users[0] == req.session.user._id) {
+    await Game.updateOne({_id: req.params.id}, { 
+      answers1: gameAnswers,
+      round: round
+    });
+  }
+  else {
+    await Game.updateOne({_id: req.params.id}, { 
+      answers2: gameAnswers,
+      round: round
+    });
+  }
+
+  res.redirect('/overviewGame/' + gameData._id);
+
 });
 
 module.exports = router;
