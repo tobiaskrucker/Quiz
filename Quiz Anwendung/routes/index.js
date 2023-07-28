@@ -243,15 +243,7 @@ router.post('/moduleselect/:id', async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  /* ausgewähltes Modul in der Datenbank als "SelectedModul" speichern
-  const { moduleselect } = req.body;
-  let selectedModule = await Module.findOne();
-  if (!selectedModule) {
-    selectedModule = new SelectedModule();
-  }
-  selectedModule.name = moduleselect;
-  await selectedModule.save();
-  */
+
   const module = await Module.findOne({_id: req.params.id})
   const question = await Question.find({module: module._id});
   res.render('qmanagement.ejs', { user: req.session.user, module: module, moduleselect: module, question: question });

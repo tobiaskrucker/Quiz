@@ -16,7 +16,7 @@
         <div class="container">
             <h1>IU Quiz</h1>
             <p>Duellmodus</p>
-
+            
             <% let questions = []; %>
             <% for (let i = 0; i < 2; i++) { %>
               <% questions[i] = {
@@ -49,32 +49,26 @@
       </main>
       <script>
         document.getElementById('submitButton').addEventListener('click', function() {
-          // Erklärung zur Frage anzeigen
+        //Erklärung zur Frage anzeigen
           const elements = document.querySelectorAll(".alert.alert-secondary");
             elements.forEach(element => {
             element.style.display = 'block';
           });
 
-          // Prüfen, ob Frage richtig beantwortet wurde
-          let cards = document.querySelectorAll('.card');
+         /* Prüfen, ob Frage richtig beantwortet wurde
+         function submitHandler(game) {
+          const cards = document.querySelectorAll('.card');
           cards.forEach(function(card, i) {
-            let selectedOption = cards.querySelector();
-            let correctAnswer = game.questions[i].rightAnswer;
-            if (selectedOption && selectedOption.value === correctAnswer) {
-             // richtige Frage grün markieren
-              card.classList.add('correct-answer');
-             // Punkte dem Spiel hinzufügen 
-              game.points[userInGame] += 3;
-              
-              // 
+          let selectedOption = card.querySelector('input[type=radio]:checked');
+          let correctAnswer = game.questions[i].rightAnswer;
+          if (selectedOption.value === correctAnswer) {
+          // richtige Frage grün markieren
+          card.classList.add('correct-answer');
+          // Punkte dem Spiel hinzufügen 
+          //game.points[userInGame] += 3;
             }
-          });
+          });} */
         });
-      </script>
-      
-      
-      
-     
-      
+      </script> 
 </body>
 </html>
