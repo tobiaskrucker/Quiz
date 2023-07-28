@@ -5,7 +5,10 @@
   <%- include('./partials/head'); %>
   <style>
     .correct-answer {
-      background-color: #c3e6c5 !important;
+      background-color: #4bac50 !important;
+    }
+    .false-answer {
+      background-color: #d41717 !important;
     }
   </style>
 </head>
@@ -52,33 +55,86 @@
                 Erklärung: <%= game.questions[i].explanation %>
               </div>
             <% } %>
+                
 
+            <button class="btn btn-primary" type="submit" id="submitButton" onclick="submitHandler('<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>')">Submit</button>
 
-            <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+            <button class="btn btn-primary" type="next" id="nextButton" >Weiter</button>
         </div>
       </main>
       <script>
+        // Submit Button ausblenden
+          function disableButton() {
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+            submitButton.classList.add('disabled');
+             }
+
+         // Weiter Button einblenden    
+          function showButton() {
+            const nextButton = document.getElementById('nextButton');
+            nextButton.style.display = 'block';
+             }
+
+          // Weiter Button ausblenden
+          hideButton();
+          function hideButton(){
+            const nextButton = document.getElementById('nextButton');
+            nextButton.style.display = 'none';
+          }
+
+        
+
+// Prüfen, ob Antwort richig oder falsch
+function submitHandler(game, user) {
+  console.log(user);
+  const cards = document.querySelectorAll(".card");
+  cards.forEach(function (card, i) {
+    let selectedOption = card.querySelector('input[type=radio]:checked');
+    let correctAnswer = game.questions[i].rightAnswer;
+    if (selectedOption && selectedOption.value === correctAnswer) {
+      // richtige Antwort grün markieren
+      selectedOption.parentElement.classList.add('correct-answer');
+    } else {
+      selectedOption.parentElement.classList.add('false-answer');
+    }
+    // Punkte vergeben
+    pointsHandler(game, user);
+  });
+}
+
+function pointsHandler(game, user) {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach(function (card, i) {
+    let selectedOption = card.querySelector('input[type=radio]:checked');
+    let correctAnswer = game.questions[i].rightAnswer;
+    if (selectedOption && selectedOption.value === correctAnswer) {
+      // dem User 3 Punkte zuweisen
+      if (game.users[0] === user._id) {
+        game.points[0] += 3;
+      } 
+    }
+    // keine Punkte vergeben
+  });
+}
+
+        // Event-Listener für den Submit-Button
         document.getElementById('submitButton').addEventListener('click', function() {
-        //Erklärung zur Frage anzeigen
+          // Erklärung zur Frage anzeigen
           const elements = document.querySelectorAll(".alert.alert-secondary");
-            elements.forEach(element => {
+          elements.forEach(element => {
             element.style.display = 'block';
           });
+          
+          // Aufrufen der Funktion submitHandler
+        submitHandler(<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>);
 
-         /* Prüfen, ob Frage richtig beantwortet wurde
-         function submitHandler(game) {
-          const cards = document.querySelectorAll('.card');
-          cards.forEach(function(card, i) {
-          let selectedOption = card.querySelector('input[type=radio]:checked');
-          let correctAnswer = game.questions[i].rightAnswer;
-          if (selectedOption.value === correctAnswer) {
-          // richtige Frage grün markieren
-          card.classList.add('correct-answer');
-          // Punkte dem Spiel hinzufügen 
-          //game.points[userInGame] += 3;
-            }
-          });} */
+
+        // Aufrufen der Funktionen disableButton und showButton
+          disableButton();
+          showButton();
         });
-      </script> 
+      </script>
+      
 </body>
 </html>
