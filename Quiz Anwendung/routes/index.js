@@ -116,9 +116,22 @@ router.get('/dashboard', async ( req, res) => {
     return res.redirect('/login');
   }
   const game = await Game.find({users: req.session.user._id});
-  const module = await Module.find();
+  
+  const modules = await Module.find();
+  var moduleList = [];
+  for(i = 0; i < modules.length; i++){
+    moduleList.push(modules[i]._id);
+    moduleList.push(modules[i].name);
+  }
 
-  res.render('dashboard.ejs', { user: req.session.user, game: game, module: module});
+  const users = await User.find();
+  var userList = [];
+  for(i = 0; i < users.length; i++){
+    userList.push(users[i]._id);
+    userList.push(users[i].username);
+  }
+
+  res.render('dashboard.ejs', { user: req.session.user, game: game, userList: userList, moduleList: moduleList }); 
   
 });
 

@@ -37,13 +37,37 @@
               </tr>
           </thead>
             
-          <% {game.forEach( function(game) { %>
+          <% {game.forEach( function(game) {
+
+            var moduleName;
+            for (var i = 0; i < moduleList.length; i+=2) {
+              if (moduleList[i].toHexString() == game.module[0].toHexString()){
+                moduleName = moduleList[i+1];
+              }
+            } 
+  
+            var partner = game.users[0];
+            if (game.users[0] == user._id) {
+              partner = game.users[1]
+            } 
+            
+            var partnerName
+            if (game.users.length == 1) {
+                partnerName = "-";
+            }
+            else {
+              for (var i = 0; i < userList.length; i+=2) {
+                if (userList[i].toHexString() == partner.toHexString()){
+                  partnerName = userList[i+1];
+                }
+              }
+            } %>
             <tbody>
               <tr>
-                <td scope="row"><%= game.module %></td>
+                <td scope="row"><%= moduleName %></td>
                 <td scope="row"><%= game.modus %></td>
-                <td scope="row">Partner</td>
-                <td scope="row">Runde</td>
+                <td scope="row"><%= partnerName %></td>
+                <td scope="row"><%= game.round %></td>
                 <td scope="row">Am Zug</td>
                 <td scope="row">Zeit</td>
                 <td><a class="btn btn-secondary btn-sm" href="/overviewGame/<%= game._id %>">Fortsetzen</a></td>
