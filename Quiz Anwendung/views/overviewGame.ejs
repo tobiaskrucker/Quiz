@@ -18,7 +18,7 @@
     </div>
       <!-- Hier müssen noch die Vjeweiligen Links eingefügt werden, bislang nicht definiert -->
       <a href="/dashboard" class="btn btn-secondary" role="button">zurück</a> 
-      <a href="/game/<%= game._id %>" class="btn btn-dark" role="button">Nächste Runde spielen</a>    
+      <a href="/game/<%= game._id %>" class="btn btn-dark" id="nextRound" role="button">Nächste Runde spielen</a>    
     <div class="media text-muted pt-5">
     </div>
     <h5 class="border-bottom border-gray pb-2 mb-2">
@@ -77,16 +77,16 @@
             <% } %>
           </div>
           <div class="col text-center">
-            <% if(answers2[round].answer1 == 'true'){ %>
+            <% if(answers2[round].answer1 == true){ %>
             <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(answers2[round].answer1 == 'false'){ %>
+            <% } else if(answers2[round].answer1 == false){ %>
             <button type="button" class="btn btn-danger btn-sm"></button>
             <% } else { %>
             <button type="button" class="btn btn-secondary btn-sm"></button>
             <% } %>
-            <% if(answers2[round].answer2 == 'true'){ %>
+            <% if(answers2[round].answer2 == true){ %>
             <button type="button" class="btn btn-success btn-sm"></button>
-            <% } else if(answers2[round].answer2 == 'false'){ %>
+            <% } else if(answers2[round].answer2 == false){ %>
             <button type="button" class="btn btn-danger btn-sm"></button>
             <% } else { %>
             <button type="button" class="btn btn-secondary btn-sm"></button>
@@ -100,5 +100,30 @@
 
       </div>   
   </main>
+  <script>
+    const gameData = <%- JSON.stringify(game) %>;
+    const userData = <%- JSON.stringify(user) %>;
+
+    if(gameData.users[0] == userData._id) {
+      if(gameData.answers1.length > gameData.answers2.length)
+        disableButton();
+      }else {
+
+    if(gameData.users[1] == userData._id) {
+      if(gameData.answers2.length > gameData.answers1.length)
+        disableButton();
+      } }
+
+      if(gameData.answers2.length == 14 && gameData.answers1.length == 14){
+        disableButton();
+      }
+
+    // "Nächste Runde spielen" Button ausblenden
+      function disableButton() {
+        const nextRoundButton = document.getElementById('nextRound');
+        nextRoundButton.disabled = true;
+        nextRoundButton.classList.add('disabled');
+        }
+  </script>
 </body>
 </html>

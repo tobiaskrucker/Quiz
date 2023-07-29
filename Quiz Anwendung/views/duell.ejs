@@ -48,7 +48,8 @@
               <% } %>
                   
 
-              <button class="btn btn-primary" type="button" id="submitButton" onclick="submitHandler('<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>')">Submit</button>
+              <button class="btn btn-primary" type="button" id="submitButton"
+               onclick="submitHandler('<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>')">Submit</button>
 
               <button class="btn btn-primary" type="submit" id="nextButton">Weiter</button>
             </form>
@@ -62,13 +63,13 @@
             submitButton.classList.add('disabled');
              }
 
-         // Weiter Button einblenden    
+        // Weiter Button einblenden    
           function showButton() {
             const nextButton = document.getElementById('nextButton');
             nextButton.style.display = 'block';
              }
 
-          // Weiter Button ausblenden
+        // Weiter Button ausblenden
           hideButton();
           function hideButton(){
             const nextButton = document.getElementById('nextButton');
@@ -77,11 +78,11 @@
 
           // Prüfen, ob Antwort richig oder falsch
           function submitHandler(game, user) {
-            console.log(user);
             const cards = document.querySelectorAll(".card");
+            let currentRound = game.round;
             cards.forEach(function (card, i) {
               let selectedOption = card.querySelector('input[type=radio]:checked');
-              let correctAnswer = game.questions[i].rightAnswer;
+              let correctAnswer = game.questions[currentRound].rightAnswer;
               if (selectedOption && selectedOption.value === correctAnswer) {
                 // richtige Antwort grün markieren
                 selectedOption.parentElement.classList.add('correct-answer');
@@ -90,22 +91,30 @@
                 selectedOption.parentElement.classList.add('false-answer');
                 selectedOption.value = false;
               }
+              currentRound++;
               // Punkte vergeben
               pointsHandler(game, user);
             });
+          
           }
-
+        // funktioniert noch nicht
           function pointsHandler(game, user) {
             const cards = document.querySelectorAll(".card");
+            let currentRound = game.round;
             cards.forEach(function (card, i) {
               let selectedOption = card.querySelector('input[type=radio]:checked');
-              let correctAnswer = game.questions[i].rightAnswer;
+              let correctAnswer = game.questions[currentRound].rightAnswer;
+              console.log(selectedOption.value);
               if (selectedOption && selectedOption.value === correctAnswer) {
                 // dem User 3 Punkte zuweisen
+                console.log("Abfrage richtig")
                 if (game.users[0] === user._id) {
                   game.points[0] += 3;
+                  console.log("3 Punkte")
                 } 
+                console.log("0 Punkte")
               }
+              currentRound++;
               // keine Punkte vergeben
             });
           }

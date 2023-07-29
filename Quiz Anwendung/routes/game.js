@@ -35,7 +35,9 @@ router.post('/answers/:id', async (req, res) => {
 
   //Antworten in Schema "Game" für die jeweilige Runde hinterlegen
   const gameData = await Game.findOne({ _id: req.params.id })
- 
+  console.log("gameData.round: ");
+  console.log(gameData.round);
+
   var gameAnswers = [];
 
   if(gameData.users[0] == req.session.user._id) {
@@ -52,24 +54,29 @@ router.post('/answers/:id', async (req, res) => {
   for(key = 0; key < keys.length; key++) {
     gameAnswers.push(formData[keys[key]]);
   }
-  
-  console.log("gameAnswers added:");
-  console.log(gameAnswers);
-
-  const round = gameData.round + 1;
 
   if(gameData.users[0] == req.session.user._id) {
     await Game.updateOne({_id: req.params.id}, { 
       answers1: gameAnswers,
-      round: round
+      
     });
   }
   else {
     await Game.updateOne({_id: req.params.id}, { 
       answers2: gameAnswers,
-      round: round
+      
     });
   }
+
+  const countAnswers = await Game.findOne({_id: req.params.id});
+
+  if(countAnswers.answers1.length === countAnswers.answers2.length){
+    gameData.round = gameData.round + 2;
+    }
+
+    await Game.updateOne({_id: req.params.id}, { 
+      round: gameData.round
+    });
 
   res.redirect('/overviewGame/' + gameData._id);
 
