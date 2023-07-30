@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <%- include('./partials/head'); %>
+
+</head>
+<body class="bg-light">
+  <%- include('./partials/header'); %>
+ 
+    <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+        <form action="/profile" method="POST">
+            <table id="profileTable" class="table table-hover">
+
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Accountinformationen</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td scope="row">E-Mail-Adresse</td>
+                        <td scope="row"><%= user.email %></td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Username</td>
+                        <td scope="row"><%= user.username %></td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Passwort</td>
+                        <td scope="row">
+                        <input
+                            class="form-control"
+                            id="formControlAllowed"
+                            name="inputPassword"
+                            type="text"
+                            value="<%= user.password %>"
+                        />
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+            <button class="btn btn-secondary btn-sm" type="submit">Speichern</button>
+        </form>
+    </main>
+
+</body>
+</html>

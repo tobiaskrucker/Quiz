@@ -470,5 +470,32 @@ router.get('/overviewGame/:id', async (req, res) => {
   }
 });
 
+// Profilverwaltung-Route
+router.get('/profile', (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  res.render('profile.ejs', { user: req.session.user });
+});
+
+router.post('/profile', async (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  const formData = req.body;
+
+  await User.updateOne({_id: req.session.user._id}, { 
+    password: formData.inputPassword
+  });
+
+  req.session.user.password = formData.inputPassword;
+
+  res.redirect('/profile');
+
+});
+
 module.exports = router;
 
