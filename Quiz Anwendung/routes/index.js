@@ -194,8 +194,8 @@ router.post('/selectModule', async (req, res) => {
     var newGame = new Game();
     newGame.users[0] = req.session.user;
     newGame.round = 0;
-    newGame.points[0] = 0;
-    newGame.points[1] = 0;
+    newGame.points1 = 0;
+    newGame.points2 = 0;
     newGame.modus = req.session.setup;
     newGame.module = formData.module;
 

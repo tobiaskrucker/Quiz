@@ -39,6 +39,11 @@ router.post('/answers/:id', async (req, res) => {
   console.log(gameData.round);
 
   var gameAnswers = [];
+  var gamePoints = [];
+  gamePoints[0] = 0;
+  gamePoints[1] = 0;
+
+  
 
   if(gameData.users[0] == req.session.user._id) {
     gameAnswers = gameData.answers1;
@@ -70,12 +75,24 @@ router.post('/answers/:id', async (req, res) => {
 
   const countAnswers = await Game.findOne({_id: req.params.id});
 
+  for(key = 0; key < 14; key++) {
+    if(gameData.answers1[key])
+    gamePoints[0] += 3;
+  }
+
+  for(key = 0; key < 14; key++) {
+    if(gameData.answers2[key])
+    gamePoints[1] += 3;
+  }
+
   if(countAnswers.answers1.length === countAnswers.answers2.length){
     gameData.round = gameData.round + 2;
     }
 
     await Game.updateOne({_id: req.params.id}, { 
-      round: gameData.round
+      round: gameData.round,
+      points1: gamePoints[0],
+      points2: gamePoints[1],
     });
 
   res.redirect('/overviewGame/' + gameData._id);
