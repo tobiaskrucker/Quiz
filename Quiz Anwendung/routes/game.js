@@ -73,14 +73,19 @@ router.post('/answers/:id', async (req, res) => {
     });
   }
 
+  // Punkte innerhalb des Spiels vergeben
   for(key = 0; key < 14; key++) {
-    if(gameData.answers1[key])
-    gamePoints[0] += 3;
+    if(gameData.answers1[key]){
+    gamePoints[0] += 2;}
+    else if(gameData.answers1[key] === false){
+    gamePoints[0] -= 1;}
   }
 
   for(key = 0; key < 14; key++) {
-    if(gameData.answers2[key])
-    gamePoints[1] += 3;
+    if(gameData.answers2[key]){
+    gamePoints[1] += 2;}
+    else if(gameData.answers2[key] === false){
+    gamePoints[1] -= 1;}
   }
 
   // Fragenzähler
@@ -101,6 +106,25 @@ router.post('/answers/:id', async (req, res) => {
       points2: gamePoints[1],
       questionCount: gameData.questionCount
     });
+
+    // Spiel beenden und Punkte dem User hinzufügen
+    if(gameData.answers1.length == 14 && gameData.answers2.length == 14){
+      let userData1 = await User.findOne({_id: gameData.users[0]});
+      userData1.games += 1;
+      await User.updateOne({_id: gameData.users[0]},{
+       points: gameData.points1,
+       games: userData1.games, 
+      })
+
+      let userData2 = await User.findOne({_id: gameData.users[1]});
+      userData2.games += 1;
+      await User.updateOne({_id: gameData.users[1]},{
+       points: gameData.points2,
+       games: userData2.games, 
+      })
+      
+      //await Game.deleteOne({_id: req.params.id});
+    }
 
   res.redirect('/overviewGame/' + gameData._id);
 
