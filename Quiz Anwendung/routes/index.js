@@ -193,7 +193,8 @@ router.post('/selectModule', async (req, res) => {
   if(!openGame) {
     var newGame = new Game();
     newGame.users[0] = req.session.user;
-    newGame.round = 0;
+    newGame.round = 1;
+    newGame.questionCount = 0;
     newGame.points1 = 0;
     newGame.points2 = 0;
     newGame.modus = req.session.setup;

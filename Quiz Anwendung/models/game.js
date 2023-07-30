@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const gameSchema = new mongoose.Schema({
   
   round: Number,
+  questionCount: Number,
   points1: Number,
   points2: Number,
   modus: [String],

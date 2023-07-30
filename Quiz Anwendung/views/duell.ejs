@@ -21,7 +21,7 @@
             <p>Duellmodus</p>
             <form action="/answers/<%= game._id %>" method="POST">
               <% let questions = []; %>
-              <% for (let i = game.round; i < game.round + 2; i++) { %>
+              <% for (let i = game.questionCount; i < game.questionCount + 2; i++) { %>
                 <% questions[i] = {
                     question: game.questions[i].question,
                     rightAnswer: game.questions[i].rightAnswer
@@ -79,7 +79,7 @@
           // Prüfen, ob Antwort richig oder falsch
           function submitHandler(game, user) {
             const cards = document.querySelectorAll(".card");
-            let currentRound = game.round;
+            let currentRound = game.questionCount;
             cards.forEach(function (card, i) {
               let selectedOption = card.querySelector('input[type=radio]:checked');
               let correctAnswer = game.questions[currentRound].rightAnswer;
@@ -92,32 +92,10 @@
                 selectedOption.value = false;
               }
               currentRound++;
-              // Punkte vergeben
-              pointsHandler(game, user);
             });
           
           }
-        // funktioniert noch nicht
-          function pointsHandler(game, user) {
-            const cards = document.querySelectorAll(".card");
-            let currentRound = game.round;
-            cards.forEach(function (card, i) {
-              let selectedOption = card.querySelector('input[type=radio]:checked');
-              let correctAnswer = game.questions[currentRound].rightAnswer;
-              console.log(selectedOption.value);
-              if (selectedOption && selectedOption.value === correctAnswer) {
-                // dem User 3 Punkte zuweisen
-                console.log("Abfrage richtig")
-                if (game.users[0] === user._id) {
-                  game.points1 += 3;
-                  console.log("3 Punkte")
-                } 
-                console.log("0 Punkte")
-              }
-              currentRound++;
-              // keine Punkte vergeben
-            });
-          }
+        
 
         // Event-Listener für den Submit-Button
         document.getElementById('submitButton').addEventListener('click', function() {
