@@ -118,11 +118,24 @@
           
           }
 
+          //Highlight correct Answer
+          function highlightCorrectAnswer(game) {
+            const options = document.querySelectorAll('input[type=radio]');
+            options.forEach(function (option) {
+              game.questions.forEach(function(question) {
+                if(option.value == question.rightAnswer) {
+                option.parentElement.classList.add('correct-answer');
+              }
+              })
+            })
+          }
+
         // Kommentar Inputs deaktivieren
         function disableCommentInput() {
-            const commentInput = document.getElementsByName('comment');
-            commentInput.forEach(function (input) {
-              input.readonly = true;
+            const commentInputs = document.getElementsByName('comment');
+            console.log(commentInputs);
+            commentInputs.forEach(function (input) {
+              input.readOnly = true;
             })
           }
 
@@ -137,6 +150,8 @@
         // Aufrufen der Funktion submitHandler
         submitHandler(<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>);
 
+        //Richtige Antworten grün markieren
+        highlightCorrectAnswer(<%- JSON.stringify(game) %>);
 
         // Aufrufen der Funktionen disableButton und showButton
           disableButton();
