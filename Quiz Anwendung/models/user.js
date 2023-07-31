@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
   password: String,
   role: String,
   games: Number,
+  win: Number,
+  loose: Number,
   points: Number
 });
 

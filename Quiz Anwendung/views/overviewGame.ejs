@@ -12,15 +12,26 @@
     </h4>
     <div class="media text-muted pt-3">
     </div>
-    <!-- Hier müssen noch die Variablen für den Spielpartner und den ausgewählten Spielmodus eingefügt werden, bislang nicht definiert -->
     <p>Sie befinden sich in einem <span class="badge bg-secondary"><%= game.modus %></span> mit Fragen aus dem Modul <span class="badge bg-secondary"><%= moduleName %></span></p>
     <div class="media text-muted pt-3">
     </div>
-      <!-- Hier müssen noch die Vjeweiligen Links eingefügt werden, bislang nicht definiert -->
-      <a href="/dashboard" class="btn btn-secondary" role="button">zurück</a> 
-      <a href="/game/<%= game._id %>" class="btn btn-dark" id="nextRound" role="button">Nächste Runde spielen</a>    
-    <div class="media text-muted pt-5">
-    </div>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col-md-8"> 
+            <a href="/dashboard" class="btn btn-secondary" role="button">zurück</a> 
+            <a href="/game/<%= game._id %>" class="btn btn-dark" role="button">Nächste Runde spielen</a>
+          </div>
+          <div class="col-md-4 d-flex justify-content-end"> 
+            <a href="/closeGame/<%= game._id %>" class="btn btn-danger" role="button">
+              <i class="fas fa-times-circle mr-1"></i> Spiel abbrechen
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="media text-muted pt-5">
+      </div>
+      
+      
     <h5 class="border-bottom border-gray pb-2 mb-2">
       <!-- Hier müssen noch die Variablen für die jeweiligen Punkte eingefügt werden, bislang nicht definiert -->
       <p>Spielstand:</p>
@@ -98,6 +109,11 @@
         }
         %>
 
+      </div>
+      <div class="media text-muted pt-3">
+      </div>
+        <a href="/closeGame/<%= game._id %>" class="btn btn-dark" id="closeGame" role="button">Spiel beenden</a>    
+      <div class="media text-muted pt-5">
       </div>   
   </main>
   <script>
@@ -116,7 +132,8 @@
 
       if(gameData.answers2.length == 14 && gameData.answers1.length == 14){
         disableButton();
-      }
+        showCloseGameButton();
+      }else {hideCloseGameButton();}
 
     // "Nächste Runde spielen" Button ausblenden
       function disableButton() {
@@ -124,6 +141,20 @@
         nextRoundButton.disabled = true;
         nextRoundButton.classList.add('disabled');
         }
+
+    // "Spiel beenden" Button einblenden
+      function hideCloseGameButton(){
+      const closeGameButton = document.getElementById('closeGame');
+      closeGameButton.style.display = 'none';
+      }
+
+      function showCloseGameButton() {
+        const closeGameButton = document.getElementById('closeGame');
+        closeGameButton.disabled = false;
+        closeGameButton.style.display = 'block';
+      }
+
+
   </script>
 </body>
 </html>

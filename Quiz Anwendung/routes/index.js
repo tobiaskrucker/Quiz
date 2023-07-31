@@ -69,6 +69,8 @@ router.post('/register', async (req, res) => {
       password: password,
       role: "user",
       games: 0,
+      win: 0,
+      loose: 0,
       points: 0
     });
     await user.save();

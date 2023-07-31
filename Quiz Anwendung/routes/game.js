@@ -111,16 +111,30 @@ router.post('/answers/:id', async (req, res) => {
     if(gameData.answers1.length == 14 && gameData.answers2.length == 14){
       let userData1 = await User.findOne({_id: gameData.users[0]});
       userData1.games += 1;
+      if(gameData.points1 > gameData.points2){
+        userData1.win += 1;
+      }else if(gameData.points1 < gameData.points2){
+        userData1.loose += 1;
+      }
       await User.updateOne({_id: gameData.users[0]},{
        points: gameData.points1,
        games: userData1.games, 
+       win: userData1.win,
+       loose: userData1.loose
       })
 
       let userData2 = await User.findOne({_id: gameData.users[1]});
       userData2.games += 1;
+      if(gameData.points2 > gameData.points1){
+        userData2.win += 1;
+      }else if(gameData.points2 < gameData.points1){
+        userData2.loose += 1;
+      }
       await User.updateOne({_id: gameData.users[1]},{
        points: gameData.points2,
        games: userData2.games, 
+       win: userData2.win,
+       loose: userData2.loose
       })
       
       //await Game.deleteOne({_id: req.params.id});
@@ -128,6 +142,15 @@ router.post('/answers/:id', async (req, res) => {
 
   res.redirect('/overviewGame/' + gameData._id);
 
+});
+
+router.get('/closeGame/:id', async (req, res) => {
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  await Game.deleteOne({_id: req.params.id});
+  res.redirect('/dashboard');
 });
 
 module.exports = router;
