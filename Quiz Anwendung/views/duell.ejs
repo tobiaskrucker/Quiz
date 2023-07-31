@@ -18,9 +18,20 @@
       <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
         <div class="container">
             <h1>IU Quiz</h1>
-            <p>Duellmodus</p>
+            <%
+            if(game.modus == "Duell") {
+            %>
+              <p>Duellmodus</p>
+            <%
+            } 
+            else {
+            %>
+              <p>Kollaborativer Modus</p>
+            <%
+            }
+            %>
             <form action="/answers/<%= game._id %>" method="POST">
-              <% let questions = []; %>
+              <% let questions = []; var commentRound = 1; %>
               <% for (let i = game.questionCount; i < game.questionCount + 2; i++) { %>
                 <% questions[i] = {
                     question: game.questions[i].question,
@@ -40,7 +51,18 @@
                       </div>
                     <% } %>
                   </div>
-                  
+                  <%
+                  if(game.modus == "Kollaborativ") {
+                    var key = "commentQuestion" + commentRound.toString();
+                  %>
+                    <div class="input-group">
+                      <span class="input-group-text">Kommentar</span>
+                      <textarea class="form-control" name="comment" required><%= game.comments[game.round - 1][key] %></textarea>
+                    </div>
+                  <% 
+                    commentRound++;
+                  } 
+                  %>
                 </div>
                 <div class="alert alert-secondary" role="alert" style ="display: none">
                   Erklärung: <%= game.questions[i].explanation %>
@@ -61,13 +83,13 @@
             const submitButton = document.getElementById('submitButton');
             submitButton.disabled = true;
             submitButton.classList.add('disabled');
-             }
+          }
 
         // Weiter Button einblenden    
           function showButton() {
             const nextButton = document.getElementById('nextButton');
             nextButton.style.display = 'block';
-             }
+          }
 
         // Weiter Button ausblenden
           hideButton();
@@ -84,7 +106,7 @@
               let selectedOption = card.querySelector('input[type=radio]:checked');
               let correctAnswer = game.questions[currentRound].rightAnswer;
               if (selectedOption && selectedOption.value === correctAnswer) {
-                // richtige Antwort grün markieren
+                // ausgewähle richtige Antwort grün markieren
                 selectedOption.parentElement.classList.add('correct-answer');
                 selectedOption.value = true;
               } else {
@@ -95,7 +117,14 @@
             });
           
           }
-        
+
+        // Kommentar Inputs deaktivieren
+        function disableCommentInput() {
+            const commentInput = document.getElementsByName('comment');
+            commentInput.forEach(function (input) {
+              input.readonly = true;
+            })
+          }
 
         // Event-Listener für den Submit-Button
         document.getElementById('submitButton').addEventListener('click', function() {
@@ -105,12 +134,13 @@
             element.style.display = 'block';
           });
           
-          // Aufrufen der Funktion submitHandler
+        // Aufrufen der Funktion submitHandler
         submitHandler(<%- JSON.stringify(game) %>, <%- JSON.stringify(user) %>);
 
 
         // Aufrufen der Funktionen disableButton und showButton
           disableButton();
+          disableCommentInput();
           showButton();
         });
       </script>

@@ -204,6 +204,44 @@ router.post('/selectModule', async (req, res) => {
     newGame.modus = req.session.setup;
     newGame.module = formData.module;
 
+    newGame.comments = [
+      //Runde 1:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      },
+      //Runde 2:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      },
+      //Runde 3:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      },
+      //Runde 4:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      },
+      //Runde 5:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      },
+      //Runde 6:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      },
+      //Runde 7:
+      {
+        commentQuestion1: '',
+        commentQuestion2: '',
+      }
+    ]
+
     //14 zufällige Fragen ermitteln
     let gameQuestions = [];
 

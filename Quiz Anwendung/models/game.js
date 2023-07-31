@@ -27,6 +27,8 @@ const gameSchema = new mongoose.Schema({
 
   answers2: [Boolean],
 
+  comments: [],
+
 });
 
 const Game = mongoose.model('Game', gameSchema);

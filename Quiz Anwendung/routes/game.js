@@ -29,16 +29,15 @@ router.post('/answers/:id', async (req, res) => {
 
   const formData = req.body;
   const keys = Object.keys(formData);
-  console.log(formData);
   console.log(keys);
-  console.log("erster wert: " + formData[keys[0]]);
+  console.log(formData);
+
 
   // Antworten in Schema "Game" für die jeweilige Runde hinterlegen
   const gameData = await Game.findOne({ _id: req.params.id })
-  console.log("gameData.round: ");
-  console.log(gameData.round);
 
   var gameAnswers = [];
+  var gameComments = gameData.comments;
   var gamePoints = [];
   gamePoints[0] = 0;
   gamePoints[1] = 0;
@@ -47,45 +46,57 @@ router.post('/answers/:id', async (req, res) => {
 
   if(gameData.users[0] == req.session.user._id) {
     gameAnswers = gameData.answers1;
-    console.log("gameData.answers1:");
-    console.log(gameAnswers);
   }
   else {
     gameAnswers = gameData.answers2;
-    console.log("gameData.answers2:");
-    console.log(gameAnswers);
   }
 
   for(key = 0; key < keys.length; key++) {
-    gameAnswers.push(formData[keys[key]]);
+    if(keys[key] != "comment") {
+      gameAnswers.push(formData[keys[key]]);
+    }
+    else {
+      gameComments[gameData.round - 1].commentQuestion1 = formData.comment[0];
+      gameComments[gameData.round - 1].commentQuestion2 = formData.comment[1];
+    }
   }
+
 
   if(gameData.users[0] == req.session.user._id) {
     await Game.updateOne({_id: req.params.id}, { 
       answers1: gameAnswers,
-      
+      comments: gameComments
     });
   }
   else {
     await Game.updateOne({_id: req.params.id}, { 
       answers2: gameAnswers,
-      
+      comments: gameComments
     });
   }
 
-  // Punkte innerhalb des Spiels vergeben
-  for(key = 0; key < 14; key++) {
-    if(gameData.answers1[key]){
-    gamePoints[0] += 2;}
-    else if(gameData.answers1[key] === false){
-    gamePoints[0] -= 1;}
-  }
+  const gameDataPoints = await Game.findOne({ _id: req.params.id });
 
-  for(key = 0; key < 14; key++) {
-    if(gameData.answers2[key]){
-    gamePoints[1] += 2;}
-    else if(gameData.answers2[key] === false){
-    gamePoints[1] -= 1;}
+  // Punkte innerhalb des Spiels berechnen
+  for(answer = 0; answer < 14; answer++) {
+    if(gameDataPoints.modus == "Kollaborativ") {
+      if((gameDataPoints.answers1[answer] == gameDataPoints.answers2[answer]) && gameDataPoints.answers1[answer] == true && gameDataPoints.answers2[answer] == true ) {
+        gamePoints[0] += 2;
+        gamePoints[1] += 2;
+      }
+    }
+    if(gameDataPoints.answers1[answer] == true) {
+      gamePoints[0] += 2;
+    }
+    else if(gameDataPoints.answers1[answer] == false) {
+      gamePoints[0] -= 1;
+    }
+    if(gameDataPoints.answers2[answer] == true) {
+      gamePoints[1] += 2;
+    }
+    else if(gameDataPoints.answers2[answer] == false) {
+      gamePoints[1] -= 1;
+    }
   }
 
   // Fragenzähler
@@ -97,6 +108,8 @@ router.post('/answers/:id', async (req, res) => {
   // Rundenzähler
   if(gameData.answers1.length > gameData.answers2.length)
       gameData.round = gameData.answers1.length/2;
+      else if(gameData.answers1.length == gameData.answers2.length)
+      gameData.round = gameData.round + 1;
       else gameData.round = gameData.answers2.length/2;
       console.log(gameData.answers1.length);
 
