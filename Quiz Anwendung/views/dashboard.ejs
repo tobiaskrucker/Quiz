@@ -27,13 +27,14 @@
           <% if(game.length == 0){ %>
             <p>Noch kein Spiel vorhanden</p>
           <% }
-             else {%> 
+             else { %> 
               <tr>
                 <th>Modul</th>
                 <th>Modus</th>
                 <th>Partner</th>
                 <th>Runde</th>
                 <th>Am Zug</th>
+                <th></th>
               </tr>
           </thead>
             
@@ -54,6 +55,7 @@
             if (game.users[0] == user._id) {
               partner = game.users[1]
             } 
+            
             var partnerName;
             if (game.users.length == 1) {
                 partnerName = "-";
@@ -64,23 +66,29 @@
                   partnerName = userList[i+1];
                 }
               }
-            } 
-            %>
+            } %>
 
             <!-- Ermitteln des Spielers, der am Zug ist.
               Der Spieler, der das Spiel gestartet hat, wird angezeigt, 
-              außer der 2. Spieler hat weniger Fragen beantwortet-->
-            <% 
-            var userTurn = game.users[0];
-            if(game.answers2.length < game.answers1.length){
-              userTurn = game.users[1];
-            }
+              außer der 2. Spieler hat weniger Fragen beantwortet -->
+            <%             
             var userTurnName;
-            for (var i = 0; i < userList.length; i+=2) {
-              if (userList[i].toHexString() == userTurn.toHexString()){
-                userTurnName = userList[i+1];
+            if( game.users.length === 1) {
+              userTurnName = "-";
+            }
+            else {
+              var userTurn = game.users[0];
+              if(game.answers2.length < game.answers1.length){
+                userTurn = game.users[1];
               }
-            } %>
+              for (var i = 0; i < userList.length; i+=2) {
+                if (userList[i].toHexString() == userTurn.toHexString()){
+                  userTurnName = userList[i+1];
+                }
+              }
+            }
+
+            %>
             <tbody>
               <tr>
                 <td scope="row"><%= moduleName %></td>
@@ -91,7 +99,7 @@
                 <td><a class="btn btn-secondary btn-sm" href="/overviewGame/<%= game._id %>">Fortsetzen</a></td>
               </tr>
             </tbody>
-          <% })};} %>
+          <% })}} %>
 
         </table>
       </form>
