@@ -22,6 +22,8 @@
         <table id="ModulesTable" class="table table-hover">
           
           <thead class="thead-dark">
+          <!-- Falls kein Spiel vorhanden ist, wird ein entsprechender Text angezeigt.
+            Sonst wird der Header für die Tabelle erstellt. -->
           <% if(game.length == 0){ %>
             <p>Noch kein Spiel vorhanden</p>
           <% }
@@ -32,26 +34,27 @@
                 <th>Partner</th>
                 <th>Runde</th>
                 <th>Am Zug</th>
-                <th>Zeit</th>
-                <th></th>
               </tr>
           </thead>
             
-          <% {game.forEach( function(game) {
-
+          <% {game.forEach( function(game) { %>
+            
+            <!-- Ermitteln des Namens des Moduls mithilfe der MongoDB-ID-->
+            <%
             var moduleName;
             for (var i = 0; i < moduleList.length; i+=2) {
               if (moduleList[i].toHexString() == game.module[0].toHexString()){
                 moduleName = moduleList[i+1];
               }
-            } 
-  
+            } %>
+            
+            <!-- Ermitteln des Namens des Partners mithilfe der MongoDB-ID-->
+            <%
             var partner = game.users[0];
             if (game.users[0] == user._id) {
               partner = game.users[1]
             } 
-            
-            var partnerName
+            var partnerName;
             if (game.users.length == 1) {
                 partnerName = "-";
             }
@@ -61,6 +64,22 @@
                   partnerName = userList[i+1];
                 }
               }
+            } 
+            %>
+
+            <!-- Ermitteln des Spielers, der am Zug ist.
+              Der Spieler, der das Spiel gestartet hat, wird angezeigt, 
+              außer der 2. Spieler hat weniger Fragen beantwortet-->
+            <% 
+            var userTurn = game.users[0];
+            if(game.answers2.length < game.answers1.length){
+              userTurn = game.users[1];
+            }
+            var userTurnName;
+            for (var i = 0; i < userList.length; i+=2) {
+              if (userList[i].toHexString() == userTurn.toHexString()){
+                userTurnName = userList[i+1];
+              }
             } %>
             <tbody>
               <tr>
@@ -68,8 +87,7 @@
                 <td scope="row"><%= game.modus %></td>
                 <td scope="row"><%= partnerName %></td>
                 <td scope="row"><%= game.round %></td>
-                <td scope="row">Am Zug</td>
-                <td scope="row">Zeit</td>
+                <td scope="row"><%= userTurnName %></td>
                 <td><a class="btn btn-secondary btn-sm" href="/overviewGame/<%= game._id %>">Fortsetzen</a></td>
               </tr>
             </tbody>
