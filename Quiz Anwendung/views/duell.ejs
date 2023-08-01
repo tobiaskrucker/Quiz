@@ -124,7 +124,7 @@
             const options = document.querySelectorAll('input[type=radio]');
             options.forEach(function (option) {
               game.questions.forEach(function(question) {
-                if(option.value == question.rightAnswer) {
+                if(option.value === question.rightAnswer) {
                 option.parentElement.classList.add('correct-answer');
               }
               })
