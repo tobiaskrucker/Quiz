@@ -129,8 +129,9 @@ router.post('/answers/:id', async (req, res) => {
       }else if(gameData.points1 < gameData.points2){
         userData1.loose += 1;
       }
+      userData1.points += gameData.points1;
       await User.updateOne({_id: gameData.users[0]},{
-       points: gameData.points1,
+       points: userData1.points,
        games: userData1.games, 
        win: userData1.win,
        loose: userData1.loose
@@ -143,14 +144,13 @@ router.post('/answers/:id', async (req, res) => {
       }else if(gameData.points2 < gameData.points1){
         userData2.loose += 1;
       }
+      userData2.points += gameData.points2;
       await User.updateOne({_id: gameData.users[1]},{
-       points: gameData.points2,
+       points: userData2.points,
        games: userData2.games, 
        win: userData2.win,
        loose: userData2.loose
       })
-      
-      //await Game.deleteOne({_id: req.params.id});
     }
 
   res.redirect('/overviewGame/' + gameData._id);
