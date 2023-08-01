@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <%- include('./partials/head'); %>
+
+</head>
+<body class="bg-light">
+  <%- include('./partials/header'); %> 
+    <main role="main" class="container bg-white rounded shadow-sm mt-3 p-3 w-75">
+
+      <!-- Anzeige der persönichen Statistik -->
+      <h5 class="border-bottom border-gray pb-2 mb-0">
+        <p>Spielstatistik von <%= user.username %></p>
+      </h5>
+      <table id="StatsTable" class="table table-hover">
+        <tr>
+          <td>Punkte</td>
+          <td><%= user.points %></td>
+        </tr>
+        <tr>
+          <td>Abgeschlossene Spiele</td>
+          <td><%= user.games %></td>
+        </tr>
+        <tr>
+          <td>Gewonenne Spiele</td>
+          <td><%= user.win %></td>
+        </tr>
+        <tr>
+          <td>Verlorene Spiele</td>
+          <td><%= user.loose %></td>
+        </tr>
+      </table>
+      <div class="media text-muted pt-3"></div>
+
+      <!-- Anzeige der 10 Benutzer mit den meisten Punkten -->
+      <h5 class="border-bottom border-gray pb-2 mb-0">
+        <p>Top 10 Ranking - Punkte</p>
+      </h5>
+      <table id="StatsTable" class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Platz</th>
+            <th>Name</th>
+            <th>Punkte</th>
+          </tr>
+        </thead>
+        <% for ( var i = 0 ; i < 10 ; i++) { %>
+        <tbody>
+          <tr>
+            <td scope="row" width="10%"><%= i+1 %></td>
+            <td scope="row" width="50%"><%= rankedUserList[i].username %></td>
+            <td scope="row" width="40%"><%= rankedUserList[i].points %></td>
+          </tr>
+        </tbody>
+        <% } %>
+      </table>
+    </main>
+</body>
+</html>

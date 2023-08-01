@@ -540,5 +540,30 @@ router.post('/profile', async (req, res) => {
 
 });
 
+
+// Ranking-Route
+router.get('/ranking', async (req, res) => {
+  
+  // Überprüfen, ob der Benutzer angemeldet ist
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  // Erstellen eines Key-Value-Arrays mit den Usernamen und Punkten der jeweiligen User in der Datenbank
+  const users = await User.find();
+  var userList = [{}];
+  for(i = 0; i < users.length; i++){
+    userList[i] = {"username" : users[i].username, "points" : users[i].points}
+  }
+  // Erstellen eines Sortieralgorithmus für das Ranking
+  function compare (a, b){
+            return b.points - a.points;
+  }
+  rankedUserList = userList.sort(compare);
+
+  // Weiterleitung auf die Ranking-Seite
+  res.render('ranking.ejs', { user: req.session.user , rankedUserList: rankedUserList});
+});
+
+
 module.exports = router;
 
