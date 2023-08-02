@@ -44,7 +44,8 @@
             <th>Punkte</th>
           </tr>
         </thead>
-        <% for ( var i = 0 ; i < 10 ; i++) { %>
+        <% for ( var i = 0 ; i < rankedUserList.length ; i++) {  %>
+        <%  if(i >= 9) { break; } %>
         <tbody>
           <tr>
             <td scope="row" width="10%"><%= i+1 %></td>
