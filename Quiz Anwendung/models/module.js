@@ -1,12 +1,7 @@
 const mongoose = require('mongoose');
 
 const moduleSchema = new mongoose.Schema({
-  name:String,
-  questions: [{
-    type: mongoose.ObjectId,
-    ref: 'Question'
-  }]
-
+  name:String
 });
 
 const Module = mongoose.model('Module', moduleSchema);
