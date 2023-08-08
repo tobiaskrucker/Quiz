@@ -120,38 +120,7 @@ router.post('/answers/:id', async (req, res) => {
       questionCount: gameData.questionCount
     });
 
-    // Spiel beenden und Punkte dem User hinzufügen
-    if(gameData.answers1.length == 14 && gameData.answers2.length == 14){
-      let userData1 = await User.findOne({_id: gameData.users[0]});
-      userData1.games += 1;
-      if(gameData.points1 > gameData.points2){
-        userData1.win += 1;
-      }else if(gameData.points1 < gameData.points2){
-        userData1.loose += 1;
-      }
-      userData1.points += gameData.points1;
-      await User.updateOne({_id: gameData.users[0]},{
-       points: userData1.points,
-       games: userData1.games, 
-       win: userData1.win,
-       loose: userData1.loose
-      })
-
-      let userData2 = await User.findOne({_id: gameData.users[1]});
-      userData2.games += 1;
-      if(gameData.points2 > gameData.points1){
-        userData2.win += 1;
-      }else if(gameData.points2 < gameData.points1){
-        userData2.loose += 1;
-      }
-      userData2.points += gameData.points2;
-      await User.updateOne({_id: gameData.users[1]},{
-       points: userData2.points,
-       games: userData2.games, 
-       win: userData2.win,
-       loose: userData2.loose
-      })
-    }
+    
 
   res.redirect('/overviewGame/' + gameData._id);
 
@@ -161,6 +130,40 @@ router.get('/closeGame/:id', async (req, res) => {
   // Überprüfen, ob der Benutzer angemeldet ist
   if (!req.session.user) {
     return res.redirect('/login');
+  }
+
+  // Spiel beenden und Punkte dem User hinzufügen
+  const gameData = await Game.findOne({ _id: req.params.id });
+  if(gameData.answers1.length == 14 && gameData.answers2.length == 14){
+    let userData1 = await User.findOne({_id: gameData.users[0]});
+    userData1.games += 1;
+    if(gameData.points1 > gameData.points2){
+      userData1.win += 1;
+    }else if(gameData.points1 < gameData.points2){
+      userData1.loose += 1;
+    }
+    userData1.points += gameData.points1;
+    await User.updateOne({_id: gameData.users[0]},{
+     points: userData1.points,
+     games: userData1.games, 
+     win: userData1.win,
+     loose: userData1.loose
+    })
+
+    let userData2 = await User.findOne({_id: gameData.users[1]});
+    userData2.games += 1;
+    if(gameData.points2 > gameData.points1){
+      userData2.win += 1;
+    }else if(gameData.points2 < gameData.points1){
+      userData2.loose += 1;
+    }
+    userData2.points += gameData.points2;
+    await User.updateOne({_id: gameData.users[1]},{
+     points: userData2.points,
+     games: userData2.games, 
+     win: userData2.win,
+     loose: userData2.loose
+    })
   }
   await Game.deleteOne({_id: req.params.id});
   res.redirect('/dashboard');
