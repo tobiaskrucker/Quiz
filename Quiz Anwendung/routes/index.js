@@ -548,6 +548,9 @@ router.get('/ranking', async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
+  // User aus der Datenbank holen
+  const user = await User.findOne({_id: req.session.user._id});
+
   // Erstellen eines Key-Value-Arrays mit den Usernamen und Punkten der jeweiligen User in der Datenbank
   const users = await User.find();
   var userList = [{}];
@@ -561,7 +564,7 @@ router.get('/ranking', async (req, res) => {
   rankedUserList = userList.sort(compare);
 
   // Weiterleitung auf die Ranking-Seite
-  res.render('ranking.ejs', { user: req.session.user , rankedUserList: rankedUserList});
+  res.render('ranking.ejs', { user: user , rankedUserList: rankedUserList});
 });
 
 
