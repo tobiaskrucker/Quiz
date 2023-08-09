@@ -139,8 +139,10 @@ router.get('/closeGame/:id', async (req, res) => {
     userData1.games += 1;
     if(gameData.points1 > gameData.points2){
       userData1.win += 1;
+      userData1.points += 3;
     }else if(gameData.points1 < gameData.points2){
       userData1.loose += 1;
+      userData1.points -= 2;
     }
     userData1.points += gameData.points1;
     await User.updateOne({_id: gameData.users[0]},{
@@ -154,8 +156,10 @@ router.get('/closeGame/:id', async (req, res) => {
     userData2.games += 1;
     if(gameData.points2 > gameData.points1){
       userData2.win += 1;
+      userData2.points += 3;
     }else if(gameData.points2 < gameData.points1){
       userData2.loose += 1;
+      userData2.points -= 2;
     }
     userData2.points += gameData.points2;
     await User.updateOne({_id: gameData.users[1]},{
